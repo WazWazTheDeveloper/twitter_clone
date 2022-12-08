@@ -1,0 +1,147 @@
+.twit-body {
+    width: 100%;
+    min-width: 530px;
+    border-top: 0px;
+    border-bottom: 1px;
+    border-right: 1px;
+    border-left: 1px;
+    border-color: var(--border-gray);
+    border-style: solid;
+    z-index: 1;
+    padding-top: 10px;
+    /* border: 1px var(--border-gray) solid; */
+}
+
+.twit-devider {
+    display: flex;
+}
+
+.twit-devider-photo {
+    width: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: top;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+}
+
+.twit-img {
+    border-radius: 100%;
+    width: 50px;
+    height: 50px;
+}
+
+.twit-devider-text {
+    width: 90%;
+}
+
+.twit-devider-text-upperpart {
+    display: flex;
+    align-items: flex-end;
+}
+
+.twit-username {
+    display: inline-block;
+    color: var(--text-color-white);
+    text-align: left;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.twit-accountname {
+    display: inline-block;
+    color: var(--text-color-gray);
+    text-align: left;
+    font-size: 1rem;
+    margin-left: 0.5rem;
+}
+
+.twit-timeposted {
+    display: inline-block;
+    color: var(--text-color-gray);
+    text-align: left;
+    font-size: 1rem;
+    margin-left: 0.3rem;
+}
+
+.twit-verification_icon {
+    margin-left: 0.3rem;
+    width: 1rem;
+    height: 1rem;
+}
+
+.twit-content {
+    color: var(--text-color-white);
+}
+
+.twit-post-image-conteiner{
+    width: 100%;
+    display: flex;
+    margin: 16px 0;
+}
+
+.twit-post-image {
+    width: 80%;
+    border-radius: 17px;
+}
+
+.twit-options {
+    width: 10%;
+}
+
+
+
+
+/* 3 dots */
+
+.twit-dropdown {
+    position: relative;
+    ;
+}
+
+.twit-dropbtn {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.twit-dropbtn div {
+    background: gray;
+    border-radius: 100%;
+    width: 5px;
+    height: 5px;
+    margin: 1px;
+}
+
+.twit-dropdown-menu {
+    display: none;
+    position: absolute;
+    z-index: 1;
+    box-shadow: rgb(255 255 255 / 20%) 0px 0px 15px, rgb(255 255 255 / 20%) 0px 0px 3px 1px;
+    border-radius: 10px;
+    overflow: hidden;
+    top: 1rem;
+    right: 1rem;
+
+    background: var(--background-black);
+}
+
+.twit-dropdown-menu div {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: var(--text-color-white);
+    padding: 6px 16px;
+    text-decoration: none;
+    display: block;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.twit-dropdown-menu div:hover {
+    background: var(--background-gray);
+}
+
+.show {
+    display: block;
+}

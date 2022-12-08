@@ -1,0 +1,52 @@
+.create-twit {
+    width: 100%;
+    border: 1px var(--border-gray) solid;
+    padding-top: 10px;
+}
+
+.create-twit-devider {
+    display: flex;
+}
+
+.create-twit-devider-photo {
+    width: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: top;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+}
+
+.create-twit-img {
+    border-radius: 100%;
+    width: 50px;
+    height: 50px;
+}
+
+.create-twit-devider-text {
+    width: 100%;
+}
+
+.create-twit-content {
+    color: var(--text-color-white);
+    width: 100%;
+    height: 100%;
+    word-break: break-all;
+    font-size: 1.2rem;
+}
+
+.create-twit-button-section{
+    position: relative;
+    display: flex;
+    justify-content: end;
+    bottom: 0.5rem;
+    right: 0.5rem;
+}
+
+.create-twit-submit{
+    color: var(--text-color-white);
+    background: rgb(29, 155, 240);
+    padding: 7px 26px;
+    border-radius: 25px;
+    font-weight: bold;
+}

@@ -1,0 +1,18 @@
+:root {
+  --background-black : black;
+  --background-white : white;
+  --background-gray : gray;
+  --text-color-white: white;
+  --text-color-gray: gray;
+  --border-white: white;
+  --border-gray: gray;
+}
+
+html *
+{
+   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+}
+
+p,input,textarea {
+  all:unset
+}

@@ -1,0 +1,20 @@
+.main-page {
+    background-color: var(--background-black);
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+
+}
+
+.main-page-left {
+    width: 75%;
+}
+
+/* center */
+.main-page-center {
+    width: 100%;
+}
+
+.main-page-right {
+    width: 100%;
+}
