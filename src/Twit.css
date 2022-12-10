@@ -74,7 +74,7 @@
     color: var(--text-color-white);
 }
 
-.twit-post-image-conteiner{
+.twit-post-image-conteiner {
     width: 100%;
     display: flex;
     margin: 16px 0;
@@ -89,6 +89,108 @@
     width: 10%;
 }
 
+.twit-buttons {
+    margin: 0 auto;
+    width: 80%;
+    display: flex;
+    margin-bottom: 16px;
+}
+
+.twit-buttons>div {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.twit-buttons p {
+    color: var(--text-color-gray);
+    font-weight: bold;
+    font-size: 0.8rem;
+    margin-left: 8px;
+    transition: all 0.5s;
+}
+
+.twit-buttons svg {
+    fill: gray;
+    height: 25px;
+    transition: all 0.5s;
+}
+
+.twit-button-comment-warper,
+.twit-button-retwit-warper,
+.twit-button-like-warper,
+.twit-button-comment-share {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.twit-button-comment-warper:hover>.svg-warper>svg,
+.twit-button-comment-warper:hover>p {
+    color: rgba(29, 155, 240, 1);
+    fill: rgba(29, 155, 240, 1);
+}
+
+.twit-button-retwit-warper:hover>.svg-warper>svg,
+.twit-button-retwit-warper:hover>p {
+    color: rgba(0, 186, 124, 1);
+    fill: rgba(0, 186, 124, 1);
+}
+
+.twit-button-like-warper:hover>.svg-warper>svg,
+.twit-button-like-warper:hover>p {
+    color: rgba(249, 24, 128, 1);
+    fill: rgba(249, 24, 128, 1);
+}
+
+.twit-button-share-warper:hover>.svg-warper>svg,
+.twit-button-share-warper:hover>p {
+    color: rgba(29, 155, 240, 1);
+    fill: rgba(29, 155, 240, 1);
+}
+
+.twit-button-comment-warper:hover>.svg-warper {
+    background: rgba(29, 155, 240, 0.1);
+}
+.twit-button-retwit-warper:hover>.svg-warper {
+    background: rgba(0, 186, 124, 0.1);
+}
+.twit-button-like-warper:hover>.svg-warper {
+    background: rgba(249, 24, 128, 0.1);
+}
+.twit-button-share-warper:hover>.svg-warper {
+    background: rgba(29, 155, 240, 0.1);
+}
+
+.svg-warper {
+    height: 34px;
+    width: 34px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.5s;
+}
+
+.twit-button-comment {
+    /* background: white; */
+}
+
+.twit-button-retwit {
+    /* background: gray; */
+
+}
+
+.twit-button-like {
+    /* background: white; */
+
+}
+
+.twit-button-share {
+    /* background: gray; */
+
+}
 
 
 
