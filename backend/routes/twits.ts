@@ -74,7 +74,7 @@ router.get('/', (req: Request, res: Response) => {
 
 router.get('/getTwits', (req: Request, res: Response) => {
     res.send(temp_data)
-    console.log("twits were sent");
+    console.log("twits sent");
 
 })
 
@@ -97,18 +97,20 @@ router.post('/createTwit', (req: Request, res: Response) => {
 
     res.status(201)
     res.send();
+    console.log("twits created");
 } )
 
 router.post('/updateTwit', (req:Request, res:Response) => {
     console.log(req.body.id);
     for (let i = 0; i < temp_data.twits.length; i++) {
-        if(temp_data.twits[i].id == req.body.id){
+        if(temp_data.twits[i].id === req.body.id){
             temp_data.twits[i].content = req.body.content
         }
     }
 
     res.status(201)
     res.send();
+    console.log("twits updated");
 })
 
 router.delete('/deleteTwit', (req: Request, res: Response) => {
@@ -121,6 +123,7 @@ router.delete('/deleteTwit', (req: Request, res: Response) => {
     
     
     res.send();
+    console.log("twits deleted");
 } )
 
 module.exports = router

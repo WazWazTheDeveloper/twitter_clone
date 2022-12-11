@@ -7,14 +7,23 @@ import {getTwits} from '../api/Twits'
 function TwitSection(props: any) {
     const [twits, setTwits] = useState<TwitProps[]>([])
 
+    /**
+     * fetch data for twits
+     */
     useEffect(() => {
         getTwits().then(data => setTwits(data))
     }, [])
 
+    /**
+     * update twits when called
+     */
     function updateTwits() {
         getTwits().then(data => setTwits(data))
     }
 
+    /**
+     * creates the twit elements
+     */
     let twitsComp = twits.map((twit) => {
         console.log(twits)
         return (<Twit key={twit.id} data={twit} updateTwits={updateTwits}/>)

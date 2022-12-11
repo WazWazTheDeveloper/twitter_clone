@@ -76,7 +76,7 @@ router.get('/', (req, res) => {
 });
 router.get('/getTwits', (req, res) => {
     res.send(temp_data);
-    console.log("twits were sent");
+    console.log("twits sent");
 });
 router.post('/createTwit', (req, res) => {
     let newTwit = {
@@ -95,6 +95,18 @@ router.post('/createTwit', (req, res) => {
     temp_data.twits.push(newTwit);
     res.status(201);
     res.send();
+    console.log("twits created");
+});
+router.post('/updateTwit', (req, res) => {
+    console.log(req.body.id);
+    for (let i = 0; i < temp_data.twits.length; i++) {
+        if (temp_data.twits[i].id === req.body.id) {
+            temp_data.twits[i].content = req.body.content;
+        }
+    }
+    res.status(201);
+    res.send();
+    console.log("twits updated");
 });
 router.delete('/deleteTwit', (req, res) => {
     console.log(req.body.id);
@@ -104,5 +116,6 @@ router.delete('/deleteTwit', (req, res) => {
         }
     }
     res.send();
+    console.log("twits deleted");
 });
 module.exports = router;

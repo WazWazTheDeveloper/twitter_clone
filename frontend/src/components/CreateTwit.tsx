@@ -4,15 +4,24 @@ import dayjs from "dayjs";
 import {createTwit} from '../api/Twits'
 
 function CreateTwit(props:any) {
-    const [twitContent, setTwitContent] = useState<string>("")
+    const [twitContent, setTwitContent] = useState<string>("") //saves the state of the content of the twit
     
+    /**
+     * handles changes in the textarea elemts and save it into a state
+     * @param e React.ChangeEvent<HTMLTextAreaElement>
+     */
     function handleContentChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
         setTwitContent(e.target.value)
     }
 
+    /**
+     * send a request to the server to create new twit
+     * @param e React.SyntheticEvent
+     */
     function handleCreateTwitButton(e: React.SyntheticEvent) {
         e.preventDefault();
-        createTwit(twitContent,props.updateTwits())
+        createTwit(twitContent)
+            .then(() => props.updateTwits())
     }
     return (
         <div className='create-twit'>

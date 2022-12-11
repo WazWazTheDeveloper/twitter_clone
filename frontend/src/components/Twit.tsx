@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import './Twit.css';
 import verification_icon from '../assets/verified.png'
 import dayjs from 'dayjs';
-import { deleteTwit } from '../api/Twits'
-import { log } from 'console';
+import { deleteTwit, updateTwits } from '../api/Twits'
+
 
 export interface TwitProps {
     id: string
@@ -25,24 +25,50 @@ interface Props {
 }
 
 function Twit(props: Props) {
-    const [isTwitEditeable, setIsTwitEditable] = useState<boolean>(true)
+    const [isTwitEditeable, setIsTwitEditable] = useState<boolean>(true) //saves the state of if the twit is editable
+    const [twitContent, setTwitContent] = useState<string>(props.data.content) // saves the state of the content on the editedtwit
 
+    /**
+    * handles the action when user what to delete a twit
+    */
     function handleDeleteTwit() {
-        console.log("im here");
-
         let id: string = props.data.id
         deleteTwit(id, props.updateTwits())
     }
 
+    /**
+    * handles the action when user click the edit/save button 
+    */
     function handleEditTwit() {
+        if (!isTwitEditeable) {
+            handleSaveEditedTwit()
+        }
         setIsTwitEditable(!isTwitEditeable)
     }
 
+    /**
+    * handles the action when user edit the twits content
+    */
+    function handleTwitOnChange(e: React.ChangeEvent<HTMLDivElement>) {
+        setTwitContent(e.target.innerHTML)
+    }
+
+    /**
+    * handles the action when user when user saves the twit
+    */
     function handleSaveEditedTwit() {
-        
+        updateTwits(props.data.id, twitContent)
+        .then((response) => {
+            if (response.ok) {
+                props.updateTwits()
+            }
+        })
     }
 
 
+    /**
+    * calculate how much time ago post was made and puts it into text form
+    */
     function timeFromPost() {
         let time: string = "0s ago"
         if (dayjs().diff(dayjs(props.data.timeposted), "d") >= 1) {
@@ -73,16 +99,13 @@ function Twit(props: Props) {
                         <p className='twit-accountname'>{props.data.acountName}</p>
                         <p className='twit-timeposted'>{timeFromPost()}</p>
                     </div>
-                    <div className='twit-content-warper' contentEditable={isTwitEditeable}>
-                        <p className='twit-content'>{props.data.content}</p>
-                    </div>
+                    <div contentEditable={true} onInput={handleTwitOnChange} className='twit-content' suppressContentEditableWarning={true}>{props.data.content}</div>
                     <div className='twit-post-image-conteiner'>
                         <img className='twit-post-image' src={props.data.postImage} alt="" />
                     </div>
                 </div>
                 <div className='twit-options'>
-                    {/* TODO: add actions to buttons*/}
-                    <Dots deleteTwit={handleDeleteTwit} editTwit={handleEditTwit}/>
+                    <Dots deleteTwit={handleDeleteTwit} editTwit={handleEditTwit} isTwitEditeable={isTwitEditeable} />
                 </div>
             </div>
             <div className='twit-buttons'>
@@ -140,7 +163,7 @@ function Dots(props: any) {
                 <div></div>
             </div>
             <div id="twit-dropdown-menu" className={"twit-dropdown-menu" + (dropdownshow ? " show" : "")}>
-                <div onClick={props.editTwit}>Edit</div>
+                <div onClick={props.editTwit}>{props.isTwitEditeable ? "save" : "Edit"}</div>
                 <div onClick={props.deleteTwit}>Delete</div>
             </div>
         </div>
