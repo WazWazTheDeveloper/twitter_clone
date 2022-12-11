@@ -98,6 +98,11 @@ router.post('/createTwit', (req, res) => {
 });
 router.delete('/deleteTwit', (req, res) => {
     console.log(req.body.id);
+    for (let i = 0; i < temp_data.twits.length; i++) {
+        if (temp_data.twits[i].id == req.body.id) {
+            temp_data.twits.splice(i, 1);
+        }
+    }
     res.send();
 });
 module.exports = router;

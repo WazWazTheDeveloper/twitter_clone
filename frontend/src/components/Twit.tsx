@@ -21,6 +21,7 @@ export interface TwitProps {
 
 interface Props {
     data: TwitProps
+    updateTwits: Function
 }
 
 function Twit(props: Props) {
@@ -29,14 +30,9 @@ function Twit(props: Props) {
         console.log("im here");
         
         let id:string = props.data.id
-        // TODO: add reload
-        deleteTwit(id,reload)
+        deleteTwit(id,props.updateTwits())
     }
 
-    function reload() {
-        console.log("asdasdasd");
-        
-    }
 
     function timeFromPost(){
         let time:string = "0s ago"

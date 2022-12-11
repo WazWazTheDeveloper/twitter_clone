@@ -17,7 +17,7 @@ function TwitSection(props: any) {
 
     let twitsComp = twits.map((twit) => {
         console.log(twits)
-        return (<Twit key={twit.id} data={twit} />)
+        return (<Twit key={twit.id} data={twit} updateTwits={updateTwits}/>)
     })
     return (
         <>

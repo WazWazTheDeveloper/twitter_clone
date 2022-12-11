@@ -101,6 +101,11 @@ router.post('/createTwit', (req: Request, res: Response) => {
 
 router.delete('/deleteTwit', (req: Request, res: Response) => {
     console.log(req.body.id);
+    for (let i = 0; i < temp_data.twits.length; i++) {
+        if(temp_data.twits[i].id == req.body.id){
+            temp_data.twits.splice(i,1)
+        }
+    }
     
     
     res.send();
