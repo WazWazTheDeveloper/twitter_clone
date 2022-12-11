@@ -1,5 +1,5 @@
 import React from 'react';
-import TwitSection from './TwitSection';
+import TwitSection from './components/TwitSection';
 import './MainPage.css';
 import './App.css';
 
