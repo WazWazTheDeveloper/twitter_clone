@@ -1,24 +1,49 @@
 import React, { useState } from 'react';
 import './Twit.css';
 import verification_icon from './assets/verified.png'
+import dayjs from 'dayjs';
 
-interface TwitProps {
-    data: {
-        id: number
-        isVerified: boolean
-        userName: string
-        acountName: string
-        timeposted: string
-        content: string
-        accountImgUrl: string
-        postImage: string
-        numberOfComments: number
-        numberOfRetwits: number
-        numberOfLikes: number
-    }
+export interface TwitProps {
+    id: string
+    isVerified: boolean
+    userName: string
+    acountName: string
+    timeposted: number
+    content: string
+    accountImgUrl: string
+    postImage: string
+    numberOfComments: number
+    numberOfRetwits: number
+    numberOfLikes: number
 }
 
-function Twit(props: TwitProps) {
+interface Props {
+    data: TwitProps
+}
+
+function Twit(props: Props) {
+
+
+    function timeFromPost(){
+        let time:string = "0s ago"
+        if(dayjs().diff(dayjs(props.data.timeposted),"y") >= 1) {
+            time = dayjs().diff(dayjs(props.data.timeposted),"y") + "y ago"
+        }
+        else if(dayjs().diff(dayjs(props.data.timeposted),"m") >= 1) {
+            time = dayjs().diff(dayjs(props.data.timeposted),"m") + "m ago"
+        }
+        else if(dayjs().diff(dayjs(props.data.timeposted),"w") >= 1) {
+            time = dayjs().diff(dayjs(props.data.timeposted),"w") + "w ago"
+        }
+        else if(dayjs().diff(dayjs(props.data.timeposted),"d") >= 1) {
+            time = dayjs().diff(dayjs(props.data.timeposted),"d") + "d ago"
+        }
+        else if(dayjs().diff(dayjs(props.data.timeposted),"s") >= 0) {
+            time = dayjs().diff(dayjs(props.data.timeposted),"s") + "s ago"
+        }
+
+        return time
+    }
     return (
         <div className='twit-body'>
             <div className='twit-devider'>
@@ -30,7 +55,7 @@ function Twit(props: TwitProps) {
                         <p className='twit-username'>{props.data.userName}</p>
                         {props.data.isVerified ? <img className='twit-verification_icon' src={verification_icon} alt="profile" /> : <></>}
                         <p className='twit-accountname'>{props.data.acountName}</p>
-                        <p className='twit-timeposted'>{props.data.timeposted}</p>
+                        <p className='twit-timeposted'>{timeFromPost()}</p>
                     </div>
                     <p className='twit-content'>{props.data.content}</p>
                     <div className='twit-post-image-conteiner'>

@@ -13,6 +13,6 @@ html *
    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
 }
 
-p,input,textarea {
+p,input,textarea,button {
   all:unset
 }
