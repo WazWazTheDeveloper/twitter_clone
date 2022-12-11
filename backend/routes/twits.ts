@@ -99,6 +99,18 @@ router.post('/createTwit', (req: Request, res: Response) => {
     res.send();
 } )
 
+router.post('/updateTwit', (req:Request, res:Response) => {
+    console.log(req.body.id);
+    for (let i = 0; i < temp_data.twits.length; i++) {
+        if(temp_data.twits[i].id == req.body.id){
+            temp_data.twits[i].content = req.body.content
+        }
+    }
+
+    res.status(201)
+    res.send();
+})
+
 router.delete('/deleteTwit', (req: Request, res: Response) => {
     console.log(req.body.id);
     for (let i = 0; i < temp_data.twits.length; i++) {

@@ -71,6 +71,7 @@
 }
 
 .twit-content {
+    width: 100%;
     color: var(--text-color-white);
 }
 

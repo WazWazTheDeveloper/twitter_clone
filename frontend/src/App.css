@@ -1,18 +1,24 @@
 :root {
-  --background-black : black;
-  --background-white : white;
-  --background-gray : gray;
-  --text-color-white: white;
-  --text-color-gray: gray;
-  --border-white: white;
-  --border-gray: gray;
+    --background-black: black;
+    --background-white: white;
+    --background-gray: gray;
+    --text-color-white: white;
+    --text-color-gray: gray;
+    --border-white: white;
+    --border-gray: gray;
 }
 
-html *
-{
-   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+html * {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
 }
 
-p,input,textarea,button {
-  all:unset
+p,
+input,
+textarea,
+button {
+    all: unset
+}
+
+[contenteditable] {
+    outline: none;
 }

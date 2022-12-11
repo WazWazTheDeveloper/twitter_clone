@@ -14,7 +14,7 @@ function createTwit(twitContent: string, next: Function) {
                 "acountName": "@IAmSteveHarvey",
                 "timeposted": dayjs().valueOf(),
                 "content": twitContent,
-                "postImage": "https://pbs.twimg.com/media/FjYjMzdWIAAKvAx?format=jpg&name=small",
+                "postImage": "",
             }
         )
     }

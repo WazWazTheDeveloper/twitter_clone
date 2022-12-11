@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './Twit.css';
 import verification_icon from '../assets/verified.png'
 import dayjs from 'dayjs';
-import {deleteTwit} from '../api/Twits'
+import { deleteTwit } from '../api/Twits'
 import { log } from 'console';
 
 export interface TwitProps {
@@ -25,28 +25,37 @@ interface Props {
 }
 
 function Twit(props: Props) {
+    const [isTwitEditeable, setIsTwitEditable] = useState<boolean>(true)
 
     function handleDeleteTwit() {
         console.log("im here");
+
+        let id: string = props.data.id
+        deleteTwit(id, props.updateTwits())
+    }
+
+    function handleEditTwit() {
+        setIsTwitEditable(!isTwitEditeable)
+    }
+
+    function handleSaveEditedTwit() {
         
-        let id:string = props.data.id
-        deleteTwit(id,props.updateTwits())
     }
 
 
-    function timeFromPost(){
-        let time:string = "0s ago"
-        if(dayjs().diff(dayjs(props.data.timeposted),"d") >= 1) {
+    function timeFromPost() {
+        let time: string = "0s ago"
+        if (dayjs().diff(dayjs(props.data.timeposted), "d") >= 1) {
             time = dayjs(props.data.timeposted).format("MMM D")
         }
-        else if(dayjs().diff(dayjs(props.data.timeposted),"h") >= 1) {
-            time = dayjs().diff(dayjs(props.data.timeposted),"h") + "h"
+        else if (dayjs().diff(dayjs(props.data.timeposted), "h") >= 1) {
+            time = dayjs().diff(dayjs(props.data.timeposted), "h") + "h"
         }
-        else if(dayjs().diff(dayjs(props.data.timeposted),"m") >= 1) {
-            time = dayjs().diff(dayjs(props.data.timeposted),"m") + "m"
+        else if (dayjs().diff(dayjs(props.data.timeposted), "m") >= 1) {
+            time = dayjs().diff(dayjs(props.data.timeposted), "m") + "m"
         }
-        else if(dayjs().diff(dayjs(props.data.timeposted),"s") >= 0) {
-            time = dayjs().diff(dayjs(props.data.timeposted),"s") + "s"
+        else if (dayjs().diff(dayjs(props.data.timeposted), "s") >= 0) {
+            time = dayjs().diff(dayjs(props.data.timeposted), "s") + "s"
         }
 
         return time
@@ -64,16 +73,18 @@ function Twit(props: Props) {
                         <p className='twit-accountname'>{props.data.acountName}</p>
                         <p className='twit-timeposted'>{timeFromPost()}</p>
                     </div>
-                    <p className='twit-content'>{props.data.content}</p>
+                    <div className='twit-content-warper' contentEditable={isTwitEditeable}>
+                        <p className='twit-content'>{props.data.content}</p>
+                    </div>
                     <div className='twit-post-image-conteiner'>
                         <img className='twit-post-image' src={props.data.postImage} alt="" />
                     </div>
                 </div>
                 <div className='twit-options'>
-                    <Dots deleteTwit={handleDeleteTwit}/>
+                    {/* TODO: add actions to buttons*/}
+                    <Dots deleteTwit={handleDeleteTwit} editTwit={handleEditTwit}/>
                 </div>
             </div>
-            {/* TODO: add actions to buttons*/}
             <div className='twit-buttons'>
                 <div className='twit-button-comment'>
                     <div className='twit-button-comment-warper'>
@@ -129,7 +140,7 @@ function Dots(props: any) {
                 <div></div>
             </div>
             <div id="twit-dropdown-menu" className={"twit-dropdown-menu" + (dropdownshow ? " show" : "")}>
-                <div>Edit</div>
+                <div onClick={props.editTwit}>Edit</div>
                 <div onClick={props.deleteTwit}>Delete</div>
             </div>
         </div>
