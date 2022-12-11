@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './Twit.css';
-import verification_icon from './assets/verified.png'
+import verification_icon from '../assets/verified.png'
 import dayjs from 'dayjs';
 
 export interface TwitProps {
