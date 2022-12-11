@@ -2,21 +2,17 @@ import Twit from './Twit';
 import CreateTwit from './CreateTwit';
 import { useEffect, useState } from 'react';
 import { TwitProps } from './Twit'
+import {getTwits} from '../api/Twits'
 
 function TwitSection(props: any) {
     const [twits, setTwits] = useState<TwitProps[]>([])
 
     useEffect(() => {
-        fetch("/twits/getTwits")
-            .then(response => response.json())
-            .then(data => setTwits(data.twits))
-
+        getTwits().then(data => setTwits(data))
     }, [])
 
     function updateTwits() {
-        fetch("/twits/getTwits")
-            .then(response => response.json())
-            .then(data => setTwits(data.twits))
+        getTwits().then(data => setTwits(data))
     }
 
     let twitsComp = twits.map((twit) => {

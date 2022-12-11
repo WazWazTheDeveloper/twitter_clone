@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import './Twit.css';
 import verification_icon from '../assets/verified.png'
 import dayjs from 'dayjs';
+import {deleteTwit} from '../api/Twits'
+import { log } from 'console';
 
 export interface TwitProps {
     id: string
@@ -23,23 +25,32 @@ interface Props {
 
 function Twit(props: Props) {
 
+    function handleDeleteTwit() {
+        console.log("im here");
+        
+        let id:string = props.data.id
+        // TODO: add reload
+        deleteTwit(id,reload)
+    }
+
+    function reload() {
+        console.log("asdasdasd");
+        
+    }
 
     function timeFromPost(){
         let time:string = "0s ago"
-        if(dayjs().diff(dayjs(props.data.timeposted),"y") >= 1) {
-            time = dayjs().diff(dayjs(props.data.timeposted),"y") + "y ago"
+        if(dayjs().diff(dayjs(props.data.timeposted),"d") >= 1) {
+            time = dayjs(props.data.timeposted).format("MMM D")
+        }
+        else if(dayjs().diff(dayjs(props.data.timeposted),"h") >= 1) {
+            time = dayjs().diff(dayjs(props.data.timeposted),"h") + "h"
         }
         else if(dayjs().diff(dayjs(props.data.timeposted),"m") >= 1) {
-            time = dayjs().diff(dayjs(props.data.timeposted),"m") + "m ago"
-        }
-        else if(dayjs().diff(dayjs(props.data.timeposted),"w") >= 1) {
-            time = dayjs().diff(dayjs(props.data.timeposted),"w") + "w ago"
-        }
-        else if(dayjs().diff(dayjs(props.data.timeposted),"d") >= 1) {
-            time = dayjs().diff(dayjs(props.data.timeposted),"d") + "d ago"
+            time = dayjs().diff(dayjs(props.data.timeposted),"m") + "m"
         }
         else if(dayjs().diff(dayjs(props.data.timeposted),"s") >= 0) {
-            time = dayjs().diff(dayjs(props.data.timeposted),"s") + "s ago"
+            time = dayjs().diff(dayjs(props.data.timeposted),"s") + "s"
         }
 
         return time
@@ -63,7 +74,7 @@ function Twit(props: Props) {
                     </div>
                 </div>
                 <div className='twit-options'>
-                    <Dots />
+                    <Dots deleteTwit={handleDeleteTwit}/>
                 </div>
             </div>
             {/* TODO: add actions to buttons*/}
@@ -106,6 +117,7 @@ function Twit(props: Props) {
     )
 }
 
+
 function Dots(props: any) {
     // TODO: add actions to buttons
     const [dropdownshow, setDropdownshow] = useState(false)
@@ -122,7 +134,7 @@ function Dots(props: any) {
             </div>
             <div id="twit-dropdown-menu" className={"twit-dropdown-menu" + (dropdownshow ? " show" : "")}>
                 <div>Edit</div>
-                <div>Delete</div>
+                <div onClick={props.deleteTwit}>Delete</div>
             </div>
         </div>
     )

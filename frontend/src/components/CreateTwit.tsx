@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import './CreateTwit.css';
 import dayjs from "dayjs";
+import {createTwit} from '../api/Twits'
 
 function CreateTwit(props:any) {
     const [twitContent, setTwitContent] = useState<string>("")
@@ -9,31 +10,9 @@ function CreateTwit(props:any) {
         setTwitContent(e.target.value)
     }
 
-    function createTwit(e: React.SyntheticEvent) {
+    function handleCreateTwitButton(e: React.SyntheticEvent) {
         e.preventDefault();
-        let options: RequestInit = {
-            method:'POST',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(
-                {
-                    "userName": "Steve Harvey",
-                    "acountName": "@IAmSteveHarvey",
-                    "timeposted": dayjs().valueOf(),
-                    "content": twitContent,
-                    "postImage": "https://pbs.twimg.com/media/FjYjMzdWIAAKvAx?format=jpg&name=small",
-                }        
-            )
-        } 
-
-        fetch("/twits/createTwit", options)
-            .then((response) => {
-                if(response.ok) {
-                    props.updateTwits()
-                }
-            })
+        createTwit(twitContent,props.updateTwits())
     }
     return (
         <div className='create-twit'>
@@ -47,7 +26,7 @@ function CreateTwit(props:any) {
                     </div>
                 </div>
                 <div className='create-twit-button-section'>
-                    <button className='create-twit-submit' onClick={createTwit}> Twit </button>
+                    <button className='create-twit-submit' onClick={handleCreateTwitButton}> Twit </button>
                 </div>
             </form>
         </div>
