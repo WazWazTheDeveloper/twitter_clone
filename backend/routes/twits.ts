@@ -1,10 +1,11 @@
 import express, { Request, Response } from "express";
 const router = express.Router()
+import { v4 as uuidv4 } from 'uuid'
 
 const temp_data: any = {
     twits: [
         {
-            "id": "1",
+            "id": "761c2b4b-abaf-4c19-8f3c-e9f66dc12119",
             "isVerified": true,
             "userName": "Steve Harvey",
             "acountName": "@IAmSteveHarvey",
@@ -16,7 +17,7 @@ const temp_data: any = {
             "numberOfRetwits": 160,
             "numberOfLikes": 69,
         }, {
-            "id": "2",
+            "id": "ae3f0880-7c2f-4224-b7b2-25b9b6d55dc6",
             "isVerified": true,
             "userName": "Vincent Kompany",
             "acountName": "@VincentKompany",
@@ -28,7 +29,7 @@ const temp_data: any = {
             "numberOfRetwits": 453,
             "numberOfLikes": 420,
         }, {
-            "id": "3",
+            "id": "55e0b9dc-2522-4ed4-9d68-9440fa755248",
             "isVerified": true,
             "userName": "Steve Harvey",
             "acountName": "@IAmSteveHarvey",
@@ -40,7 +41,7 @@ const temp_data: any = {
             "numberOfRetwits": 120,
             "numberOfLikes": 69,
         }, {
-            "id": "4",
+            "id": "66060519-defa-4cb4-80e4-5a9ef83e687d",
             "isVerified": true,
             "userName": "Steve Harvey",
             "acountName": "@IAmSteveHarvey",
@@ -52,7 +53,7 @@ const temp_data: any = {
             "numberOfRetwits": 120,
             "numberOfLikes": 69,
         }, {
-            "id": "5",
+            "id": "e502e9d3-a5db-4343-8ded-65fbdf88166e",
             "isVerified": false,
             "userName": "Steve Harvey",
             "acountName": "@IAmSteveHarvey",
@@ -79,7 +80,7 @@ router.get('/getTwits', (req: Request, res: Response) => {
 
 router.post('/createTwit', (req: Request, res: Response) => {
     let newTwit = {
-        "id": temp_data.twits.count,
+        "id": uuidv4(),
         "isVerified": true,
         "userName": req.body.userName,
         "acountName": req.body.acountName,
@@ -95,6 +96,13 @@ router.post('/createTwit', (req: Request, res: Response) => {
     temp_data.twits.push(newTwit);
 
     res.status(201)
+    res.send();
+} )
+
+router.delete('/deleteTwit', (req: Request, res: Response) => {
+    console.log(req.body.id);
+    
+    
     res.send();
 } )
 

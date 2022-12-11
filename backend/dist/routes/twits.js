@@ -5,10 +5,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const router = express_1.default.Router();
+const uuid_1 = require("uuid");
 const temp_data = {
     twits: [
         {
-            "id": "1",
+            "id": "761c2b4b-abaf-4c19-8f3c-e9f66dc12119",
             "isVerified": true,
             "userName": "Steve Harvey",
             "acountName": "@IAmSteveHarvey",
@@ -20,7 +21,7 @@ const temp_data = {
             "numberOfRetwits": 160,
             "numberOfLikes": 69,
         }, {
-            "id": "2",
+            "id": "ae3f0880-7c2f-4224-b7b2-25b9b6d55dc6",
             "isVerified": true,
             "userName": "Vincent Kompany",
             "acountName": "@VincentKompany",
@@ -32,7 +33,7 @@ const temp_data = {
             "numberOfRetwits": 453,
             "numberOfLikes": 420,
         }, {
-            "id": "3",
+            "id": "55e0b9dc-2522-4ed4-9d68-9440fa755248",
             "isVerified": true,
             "userName": "Steve Harvey",
             "acountName": "@IAmSteveHarvey",
@@ -44,7 +45,7 @@ const temp_data = {
             "numberOfRetwits": 120,
             "numberOfLikes": 69,
         }, {
-            "id": "4",
+            "id": "66060519-defa-4cb4-80e4-5a9ef83e687d",
             "isVerified": true,
             "userName": "Steve Harvey",
             "acountName": "@IAmSteveHarvey",
@@ -56,7 +57,7 @@ const temp_data = {
             "numberOfRetwits": 120,
             "numberOfLikes": 69,
         }, {
-            "id": "5",
+            "id": "e502e9d3-a5db-4343-8ded-65fbdf88166e",
             "isVerified": false,
             "userName": "Steve Harvey",
             "acountName": "@IAmSteveHarvey",
@@ -79,7 +80,7 @@ router.get('/getTwits', (req, res) => {
 });
 router.post('/createTwit', (req, res) => {
     let newTwit = {
-        "id": temp_data.twits.count,
+        "id": (0, uuid_1.v4)(),
         "isVerified": true,
         "userName": req.body.userName,
         "acountName": req.body.acountName,
@@ -93,6 +94,10 @@ router.post('/createTwit', (req, res) => {
     };
     temp_data.twits.push(newTwit);
     res.status(201);
+    res.send();
+});
+router.delete('/deleteTwit', (req, res) => {
+    console.log(req.body.id);
     res.send();
 });
 module.exports = router;
