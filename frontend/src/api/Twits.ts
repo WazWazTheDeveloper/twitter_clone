@@ -33,7 +33,7 @@ function createTwit(twitContent: string,twitImg?: string): Promise<any> {
 function getTwits(): Promise<TwitProps[]> {
     return fetch("/twits/getTwits")
         .then(response => response.json())
-        .then(data => {return data.twits})
+        .then(data => {return data})
 }
 
 /**

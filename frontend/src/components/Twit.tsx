@@ -25,7 +25,7 @@ interface Props {
 }
 
 function Twit(props: Props) {
-    const [isTwitEditeable, setIsTwitEditable] = useState<boolean>(true) //saves the state of if the twit is editable
+    const [isTwitEditeable, setIsTwitEditable] = useState<boolean>(false) //saves the state of if the twit is editable
     const [twitContent, setTwitContent] = useState<string>(props.data.content) // saves the state of the content on the editedtwit
 
     /**
@@ -40,7 +40,7 @@ function Twit(props: Props) {
     * handles the action when user click the edit/save button 
     */
     function handleEditTwit() {
-        if (!isTwitEditeable) {
+        if (isTwitEditeable) {
             handleSaveEditedTwit()
         }
         setIsTwitEditable(!isTwitEditeable)
