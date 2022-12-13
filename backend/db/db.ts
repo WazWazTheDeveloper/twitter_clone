@@ -24,7 +24,7 @@ interface TwitProps {
 
 function addTwit(data: TwitProps): Promise<boolean> {
     const promise = new Promise<boolean>((resolve, reject) => {
-        // Add a twit to the table.
+        // Add a twit to the table..
         db.run("INSERT INTO twits (id, isVerified, userName, acountName, timeposted, content, accountImgUrl, postImage, numberOfComments, numberOfRetwits, numberOfLikes) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
             [data.id,
             data.isVerified,
