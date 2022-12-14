@@ -17,7 +17,7 @@ interface TwitProps {
     numberOfLikes: number
 }
 
-//TODO: dont remove just in case to need more data
+//TODO: dont remove just in case of need for a banch of data
 // const temp_data: any = {
 //     twits: [
 //         {
@@ -93,6 +93,9 @@ router.get('/', (req: Request, res: Response) => {
 })
 
 router.get('/getTwits', (req: Request, res: Response) => {
+    // add response based on pagenumber
+    console.log(req.query);
+    
     getTwits().then((data:any)=>{
         res.send(data)
         console.log("twits send");

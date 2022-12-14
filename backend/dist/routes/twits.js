@@ -80,6 +80,7 @@ router.get('/', (req, res) => {
     res.send('yeet');
 });
 router.get('/getTwits', (req, res) => {
+    console.log(req.query);
     (0, db_1.getTwits)().then((data) => {
         res.send(data);
         console.log("twits send");

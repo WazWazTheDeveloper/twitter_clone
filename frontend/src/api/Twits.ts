@@ -30,8 +30,8 @@ function createTwit(twitContent: string,twitImg?: string): Promise<any> {
 /**
  * fetch twits from server
  */
-function getTwits(): Promise<TwitProps[]> {
-    return fetch("/twits/getTwits")
+function getTwits(pageNumber = 1): Promise<TwitProps[]> {
+    return fetch(`/twits/getTwits?pageNumber=${pageNumber}`)
         .then(response => response.json())
         .then(data => {return data})
 }
