@@ -1,0 +1,110 @@
+.signup-menu {
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.15);
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.signup-menu-menu {
+    width: 700px;
+    height: 800px;
+    background: var(--background-black);
+    border-radius: 20px;
+    border-radius: 25px;
+}
+
+.signup-menu-menu-topbar {
+    position: relative;
+    height: 50px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.signup-menu-menu-topbar-exit {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    top: 12.5px;
+    left: 12.5px;
+    cursor: pointer;
+
+    /* TODO: change this to an actual icon */
+    background: pink;
+}
+
+.signup-menu-menu-topbar-icon {
+    height: 50%;
+}
+
+.signup-menu-menu-topbar-icon > img {
+    width: 100%;
+    height: 100%;
+}
+
+.signup-menu-main {
+    width: 100%;
+    height: calc(100% - 50px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+
+    color: white;
+}
+
+.signup-menu-main form {
+    width: 50%;
+    display: flex;
+    flex-wrap: wrap;
+    
+    color: white;
+}
+
+
+.signup-menu-main input {
+    margin-bottom: 15px;
+    border: gray 1px solid;
+    width: 100%;
+    font-size: 1.1;
+}
+
+.signup-menu-main label {
+    width: 100%;
+    font-weight: bold;
+    font-size: 1.1;
+}
+
+.signup-menu-main-button-warper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.signup-menu-main-button-warper button {
+    background: rgb(29, 155, 240);
+    width: 150px;
+    height: 52px;
+    border-radius: 99999px;
+    box-sizing: border-box;
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    box-sizing: border-box;
+    margin-right: 15px;
+    margin-left: 15px;
+    font-size: 1.11rem;
+    font-weight: bolder;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+

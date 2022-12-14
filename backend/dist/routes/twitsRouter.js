@@ -1,22 +1,12 @@
-import express, { Request, Response } from "express";
-const router = express.Router()
-import { v4 as uuidv4 } from 'uuid'
-import { addTwit,deleteTwit,getTwits, updateTwit } from "../db/db";
-
-interface TwitProps {
-    id: string
-    isVerified: boolean
-    userName: string
-    acountName: string
-    timeposted: number
-    content: string
-    accountImgUrl: string
-    postImage: string
-    numberOfComments: number
-    numberOfRetwits: number
-    numberOfLikes: number
-}
-
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const router = express_1.default.Router();
+const uuid_1 = require("uuid");
+const db_1 = require("../db/db");
 //TODO: dont remove just in case of need for a banch of data
 // const temp_data: any = {
 //     twits: [
@@ -86,26 +76,20 @@ interface TwitProps {
 // for (let i = 0; i < temp_data.twits.length; i++) {
 //     addTwit(temp_data.twits[i],()=>{})
 // }
-
-
-router.get('/', (req: Request, res: Response) => {
-    res.send('yeet')
-})
-
-router.get('/getTwits', (req: Request, res: Response) => {
+router.get('/', (req, res) => {
+    res.send('yeet');
+});
+router.get('/getTwits', (req, res) => {
     // add response based on pagenumber
     console.log(req.query);
-    
-    getTwits().then((data:any)=>{
-        res.send(data)
+    (0, db_1.getTwits)().then((data) => {
+        res.send(data);
         console.log("twits send");
-    })
-
-})
-
-router.post('/createTwit', (req: Request, res: Response) => {
+    });
+});
+router.post('/createTwit', (req, res) => {
     let newTwit = {
-        "id": uuidv4(),
+        "id": (0, uuid_1.v4)(),
         "isVerified": true,
         "userName": req.body.userName,
         "acountName": req.body.acountName,
@@ -116,31 +100,24 @@ router.post('/createTwit', (req: Request, res: Response) => {
         "numberOfComments": 0,
         "numberOfRetwits": 0,
         "numberOfLikes": 0,
-    }     
-
-    addTwit(newTwit).then(()=>{
-        res.status(201)
+    };
+    (0, db_1.addTwit)(newTwit).then(() => {
+        res.status(201);
         res.send();
         console.log("twits created");
-    })
-} )
-
-router.post('/updateTwit', (req:Request, res:Response) => {
-    updateTwit(req.body)
-        res.status(201)
-        res.send();
-        console.log("twits updated");
-
-
-})
-
-router.delete('/deleteTwit', (req: Request, res: Response) => {
+    });
+});
+router.post('/updateTwit', (req, res) => {
+    (0, db_1.updateTwit)(req.body);
+    res.status(201);
+    res.send();
+    console.log("twits updated");
+});
+router.delete('/deleteTwit', (req, res) => {
     console.log(req.body.id);
-    deleteTwit(req.body.id).then(()=>{
+    (0, db_1.deleteTwit)(req.body.id).then(() => {
         res.send();
         console.log("twits deleted");
-    })
-    
-} )
-
-module.exports = router
+    });
+});
+module.exports = router;

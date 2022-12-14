@@ -3,7 +3,14 @@
     width: 100%;
     min-height: 100vh;
     display: flex;
+    position: relative;
+}
 
+.main-page-signup-bar-spacer {
+    display: block;
+    height: calc( var(--signup-bar-height) - 1px);
+    content: "";
+    width: 100%;
 }
 
 .main-page-left {

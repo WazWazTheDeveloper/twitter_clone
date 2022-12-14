@@ -39,7 +39,7 @@ function addTwit(data: TwitProps): Promise<boolean> {
             data.numberOfLikes],
             function (error: Error) {
                 if (error) {
-                    reject(false);
+                    reject(new Error("error"));
                 } else {
                     resolve(true)
                 }
@@ -70,8 +70,13 @@ function getTwits(twitsCount?: number, twitsNotToGet?: Array<string>): Promise<A
                     numberOfLikes: row.numberOfLikes
                 }
                 twits.push(twit)
-            }, () => {
-                resolve(twits)
+            }, (error: Error) => {
+                if (error) {
+                    reject(new Error("error"));
+                }
+                else {
+                    resolve(twits)
+                }
             })
     });
 
@@ -84,7 +89,7 @@ function deleteTwit(idToDelete: string): Promise<boolean> {
         db.run('DELETE FROM twits WHERE (ID=?)', [idToDelete],
             function (error: Error) {
                 if (error) {
-                    reject(false);
+                    reject(new Error("error"));
                 } else {
                     resolve(true)
                 }
@@ -96,6 +101,6 @@ function deleteTwit(idToDelete: string): Promise<boolean> {
 
 function updateTwit(newData: any) {
     // const promise = new Promise<boolean>((resolve, reject) => {
-        db.run('UPDATE twits SET content=?, postImage=? WHERE (id=?)', [newData.content, newData.postImage, newData.id])
+    db.run('UPDATE twits SET content=?, postImage=? WHERE (id=?)', [newData.content, newData.postImage, newData.id])
 }
 export { addTwit, getTwits, deleteTwit, updateTwit }

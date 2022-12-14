@@ -1,12 +1,22 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
-const router = express_1.default.Router();
-const uuid_1 = require("uuid");
-const db_1 = require("../db/db");
+import express, { Request, Response } from "express";
+const router = express.Router()
+import { v4 as uuidv4 } from 'uuid'
+import { addTwit, deleteTwit, getTwits, updateTwit } from "../db/db";
+
+interface TwitProps {
+    id: string
+    isVerified: boolean
+    userName: string
+    acountName: string
+    timeposted: number
+    content: string
+    accountImgUrl: string
+    postImage: string
+    numberOfComments: number
+    numberOfRetwits: number
+    numberOfLikes: number
+}
+
 //TODO: dont remove just in case of need for a banch of data
 // const temp_data: any = {
 //     twits: [
@@ -76,20 +86,27 @@ const db_1 = require("../db/db");
 // for (let i = 0; i < temp_data.twits.length; i++) {
 //     addTwit(temp_data.twits[i],()=>{})
 // }
-router.get('/', (req, res) => {
-    res.send('yeet');
-});
-router.get('/getTwits', (req, res) => {
+
+
+router.get('/', (req: Request, res: Response) => {
+    res.send('yeet')
+})
+
+router.get('/getTwits', (req: Request, res: Response) => {
     // add response based on pagenumber
     console.log(req.query);
-    (0, db_1.getTwits)().then((data) => {
-        res.send(data);
+
+    // TODO: add catch after then
+    getTwits().then((data: any) => {
+        res.send(data)
         console.log("twits send");
-    });
-});
-router.post('/createTwit', (req, res) => {
+    })
+
+})
+
+router.post('/createTwit', (req: Request, res: Response) => {
     let newTwit = {
-        "id": (0, uuid_1.v4)(),
+        "id": uuidv4(),
         "isVerified": true,
         "userName": req.body.userName,
         "acountName": req.body.acountName,
@@ -100,24 +117,34 @@ router.post('/createTwit', (req, res) => {
         "numberOfComments": 0,
         "numberOfRetwits": 0,
         "numberOfLikes": 0,
-    };
-    (0, db_1.addTwit)(newTwit).then(() => {
-        res.status(201);
+    }
+
+    // TODO: add catch after then
+    addTwit(newTwit).then(() => {
+        res.status(201)
         res.send();
         console.log("twits created");
-    });
-});
-router.post('/updateTwit', (req, res) => {
-    (0, db_1.updateTwit)(req.body);
-    res.status(201);
+    })
+})
+
+router.post('/updateTwit', (req: Request, res: Response) => {
+    // TODO: make it wait until the update is complate
+    updateTwit(req.body)
+    res.status(201)
     res.send();
     console.log("twits updated");
-});
-router.delete('/deleteTwit', (req, res) => {
+
+
+})
+
+router.delete('/deleteTwit', (req: Request, res: Response) => {
+    // TODO: add catch after then
     console.log(req.body.id);
-    (0, db_1.deleteTwit)(req.body.id).then(() => {
+    deleteTwit(req.body.id).then(() => {
         res.send();
         console.log("twits deleted");
-    });
-});
-module.exports = router;
+    })
+
+})
+
+module.exports = router
