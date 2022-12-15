@@ -6,8 +6,7 @@ export interface User {
     accountImgUrl: string
 }
 
-function RequestCreateNewAccount(user: User): Promise<Response> {
-    let promise = new Promise<Response>((resolve, reject) => {
+function RequestCreateNewAccount(user: User) {
         let options: RequestInit = {
             method: 'POST',
             credentials: 'include',
@@ -26,12 +25,6 @@ function RequestCreateNewAccount(user: User): Promise<Response> {
         }
 
         return fetch("/users/createUser", options)
-            .then((response) => {
-                resolve(response)
-            })
-    })
-
-    return promise
 }
 
 export { RequestCreateNewAccount }

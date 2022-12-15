@@ -82,6 +82,7 @@ router.get('/', (req, res) => {
 router.get('/getTwits', (req, res) => {
     // add response based on pagenumber
     console.log(req.query);
+    // TODO: add catch after then
     (0, db_1.getTwits)().then((data) => {
         res.send(data);
         console.log("twits send");
@@ -101,6 +102,7 @@ router.post('/createTwit', (req, res) => {
         "numberOfRetwits": 0,
         "numberOfLikes": 0,
     };
+    // TODO: add catch after then
     (0, db_1.addTwit)(newTwit).then(() => {
         res.status(201);
         res.send();
@@ -108,12 +110,14 @@ router.post('/createTwit', (req, res) => {
     });
 });
 router.post('/updateTwit', (req, res) => {
+    // TODO: make it wait until the update is complate
     (0, db_1.updateTwit)(req.body);
     res.status(201);
     res.send();
     console.log("twits updated");
 });
 router.delete('/deleteTwit', (req, res) => {
+    // TODO: add catch after then
     console.log(req.body.id);
     (0, db_1.deleteTwit)(req.body.id).then(() => {
         res.send();

@@ -24,7 +24,7 @@ function addTwit(data) {
             data.numberOfRetwits,
             data.numberOfLikes], function (error) {
             if (error) {
-                reject(false);
+                reject(new Error("error"));
             }
             else {
                 resolve(true);
@@ -52,8 +52,13 @@ function getTwits(twitsCount, twitsNotToGet) {
                 numberOfLikes: row.numberOfLikes
             };
             twits.push(twit);
-        }, () => {
-            resolve(twits);
+        }, (error) => {
+            if (error) {
+                reject(new Error("error"));
+            }
+            else {
+                resolve(twits);
+            }
         });
     });
     return promise;
@@ -63,7 +68,7 @@ function deleteTwit(idToDelete) {
     const promise = new Promise((resolve, reject) => {
         db.run('DELETE FROM twits WHERE (ID=?)', [idToDelete], function (error) {
             if (error) {
-                reject(false);
+                reject(new Error("error"));
             }
             else {
                 resolve(true);

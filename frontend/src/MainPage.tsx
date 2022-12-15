@@ -10,9 +10,11 @@ function MainPage() {
     const [showSignup, setShowSignup] = useState<Boolean>(false)
     const [accountName, setAccountName] = useState<string>("")
 
-    function login(_accountName: any){
-        console.log(_accountName + " yeetetetet");
+    
+    function login(_accountName:any) {
+        _accountName.json().then((data:any) => console.log(data))
         
+
         // setAccountName(_accountName);
     }
 
@@ -22,17 +24,17 @@ function MainPage() {
 
     return (
         <>
-        <div className={`main-page ${isLoggedIn ? "" : "main-page-with-signup-bar"}`}>
-            <div className='main-page-left'></div>
-            <div className='main-page-center'>
-                <TwitSection />
+            <div className={`main-page ${isLoggedIn ? "" : "main-page-with-signup-bar"}`}>
+                <div className='main-page-left'></div>
+                <div className='main-page-center'>
+                    <TwitSection />
+                </div>
+                <div className='main-page-right'></div>
+
+                {isLoggedIn ? <></> : <SignupBar openSignupMenu={changeShowSignup} />}
             </div>
-            <div className='main-page-right'></div>
-            
-            {isLoggedIn? <></>:<SignupBar openSignupMenu={changeShowSignup}/>}
-        </div>
-        {isLoggedIn? <></>:<div className='main-page-signup-bar-spacer'></div>}
-        {showSignup ? <SignupMenu closeWindow={changeShowSignup} loginFunction={login}/>: <></>}
+            {isLoggedIn ? <></> : <div className='main-page-signup-bar-spacer'></div>}
+            {showSignup ? <SignupMenu closeWindow={changeShowSignup} loginFunction={login} /> : <></>}
         </>
     )
 }

@@ -39,9 +39,11 @@ function SignupMenu(props: any) {
             accountImgUrl: accountImgUrlInput,
         }
         RequestCreateNewAccount(user)
+        // TODO: finish this
             .then((response) => {
                 if(response.ok) {
-                    let responseJSON = response.json()
+                    // TODO: git the post request
+                    let responseJSON = response
                     props.loginFunction(responseJSON);
                 }
                 else {

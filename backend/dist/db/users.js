@@ -18,7 +18,7 @@ function createUserInDB(user) {
     const promise = new Promise((resolve, reject) => {
         db.run(`INSERT INTO users (email,password,userName,accountName,accountImgUrl) VALUES (?,?,?,?,?)`, [email, password, userName, accountName, accountImgUrl], function (error) {
             if (error) {
-                reject(false);
+                reject(new Error("error"));
             }
             else {
                 resolve(true);

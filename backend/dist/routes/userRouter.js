@@ -28,6 +28,6 @@ router.post('/createUser', (req, res) => {
             res.send("");
             console.log("failed to create a user");
         }
-    }).catch(error => alert(error.message));
+    }).catch(error => console.log(error.message));
 });
 module.exports = router;
