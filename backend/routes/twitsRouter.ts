@@ -1,7 +1,8 @@
 import express, { Request, Response } from "express";
 const router = express.Router()
 import { v4 as uuidv4 } from 'uuid'
-import { addTwit, deleteTwit, getTwits, updateTwit } from "../db/db";
+import { isPostLiked, likePost, dislikePost } from "../db/likes";
+import { addTwit, deleteTwit, getTwits, updateTwit } from "../db/twit";
 
 interface TwitProps {
     id: string
@@ -17,14 +18,14 @@ interface TwitProps {
     numberOfLikes: number
 }
 
-//TODO: dont remove just in case of need for a banch of data
+// TODO: dont remove just in case of need for a banch of data
 // const temp_data: any = {
 //     twits: [
 //         {
 //             "id": "761c2b4b-abaf-4c19-8f3c-e9f66dc12119",
 //             "isVerified": true,
 //             "userName": "Steve Harvey",
-//             "acountName": "@IAmSteveHarvey",
+//             "acountName": "1",
 //             "timeposted": 1670719416318,
 //             "content": "Help me win an argument 🤣 Do you keep your dry cereal in the refrigerator?",
 //             "accountImgUrl": "https://pbs.twimg.com/profile_images/1539412982190329862/90rLsmfU_400x400.jpg",
@@ -48,7 +49,7 @@ interface TwitProps {
 //             "id": "55e0b9dc-2522-4ed4-9d68-9440fa755248",
 //             "isVerified": true,
 //             "userName": "Steve Harvey",
-//             "acountName": "@IAmSteveHarvey",
+//             "acountName": "1",
 //             "timeposted": 1670719416318,
 //             "content": "Help me win an argument 🤣 Do you keep your dry cereal in the refrigerator?",
 //             "accountImgUrl": "https://pbs.twimg.com/profile_images/1539412982190329862/90rLsmfU_400x400.jpg",
@@ -60,7 +61,7 @@ interface TwitProps {
 //             "id": "66060519-defa-4cb4-80e4-5a9ef83e687d",
 //             "isVerified": true,
 //             "userName": "Steve Harvey",
-//             "acountName": "@IAmSteveHarvey",
+//             "acountName": "1",
 //             "timeposted": 1670719416318,
 //             "content": "Help me win an argument 🤣 Do you keep your dry cereal in the refrigerator?",
 //             "accountImgUrl": "https://pbs.twimg.com/profile_images/1539412982190329862/90rLsmfU_400x400.jpg",
@@ -72,7 +73,7 @@ interface TwitProps {
 //             "id": "e502e9d3-a5db-4343-8ded-65fbdf88166e",
 //             "isVerified": false,
 //             "userName": "Steve Harvey",
-//             "acountName": "@IAmSteveHarvey",
+//             "acountName": "1",
 //             "timeposted": 1670719416318,
 //             "content": "Help me win an argument 🤣 Do you keep your dry cereal in the refrigerator?",
 //             "accountImgUrl": "https://pbs.twimg.com/profile_images/1539412982190329862/90rLsmfU_400x400.jpg",
@@ -84,7 +85,7 @@ interface TwitProps {
 //     ]
 // }
 // for (let i = 0; i < temp_data.twits.length; i++) {
-//     addTwit(temp_data.twits[i],()=>{})
+//     addTwit(temp_data.twits[i])
 // }
 
 
@@ -92,14 +93,16 @@ router.get('/', (req: Request, res: Response) => {
     res.send('yeet')
 })
 
-router.get('/getTwits', (req: Request, res: Response) => {
+router.get('/getTwits', async (req: Request, res: Response) => {
     // add response based on pagenumber
     console.log(req.query);
 
     // TODO: add catch after then
     getTwits().then((data: any) => {
-        res.send(data)
-        console.log("twits send");
+        Promise.all(data).then(data => {
+            res.send(data)
+            console.log("twits send");
+        })
     })
 
 })
@@ -144,6 +147,31 @@ router.delete('/deleteTwit', (req: Request, res: Response) => {
         res.send();
         console.log("twits deleted");
     })
+
+})
+
+router.post('/liketwit', (req: Request, res: Response) => {
+    let accountName = req.body.accountName
+    let twitId = req.body.twitId
+    isPostLiked(accountName, twitId).then((isLiked) => {
+        console.log(isLiked + " router");
+        
+        if(isLiked){
+            dislikePost(accountName, twitId).then(() => {
+                res.send();
+                console.log(`${twitId} got a dislike`);
+            })
+        }
+        else {
+            likePost(accountName, twitId).then(() => {
+                res.send();
+                console.log(`${twitId} got a like`);
+            })
+        }
+
+    }).catch(() => {
+    })
+
 
 })
 

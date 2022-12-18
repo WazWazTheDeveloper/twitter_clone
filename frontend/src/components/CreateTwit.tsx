@@ -20,7 +20,7 @@ function CreateTwit(props:any) {
      */
     function handleCreateTwitButton(e: React.SyntheticEvent) {
         e.preventDefault();
-        createTwit(twitContent)
+        createTwit(twitContent,props.accountName)
             .then(() => props.updateTwits())
     }
     return (

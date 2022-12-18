@@ -6,7 +6,7 @@ import { TwitProps } from '../components/Twit'
  * @param twitContent content of the new twit
  * @param next a function to be fired after twit was created successfully
  */
-function createTwit(twitContent: string,twitImg?: string): Promise<any> {
+function createTwit(twitContent: string,accountName:string,twitImg?: string): Promise<any> {
     let options: RequestInit = {
         method: 'POST',
         credentials: 'include',
@@ -77,4 +77,22 @@ function deleteTwit(idToDelete: string, next ?: Function): Promise<any> {
     return fetch("/twits/deleteTwit", options)
 }
 
-export { createTwit ,getTwits, deleteTwit, updateTwits}
+function likeTwit(twitId: string, accountName:string): Promise<any> {
+    let options: RequestInit = {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(
+            {
+                "twitId": twitId,
+                "accountName": accountName,
+            }
+        )
+    }
+
+    return fetch("/twits/liketwit", options)
+}
+
+export { createTwit ,getTwits, deleteTwit, updateTwits, likeTwit}

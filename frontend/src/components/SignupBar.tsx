@@ -8,7 +8,7 @@ function SignupBar(props:any) {
                     <p>People on Twitter are the first to know.</p>
                 </div>
                 <div className='main-page-sign-up-button-warpper'>
-                    <div>Log in</div>
+                    <div onClick={props.openLoginMenu}>Log in</div>
                     <div onClick={props.openSignupMenu}>Sign up</div>
                 </div>
             </div>

@@ -1,4 +1,7 @@
-Do npm install
-then do npm run
+npm install
+cd backend
+npx tsc
+node ./dist/app.js
 
-then enjoy my shit
+cd fontend
+npm start

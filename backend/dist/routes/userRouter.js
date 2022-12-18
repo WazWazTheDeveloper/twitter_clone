@@ -28,6 +28,24 @@ router.post('/createUser', (req, res) => {
             res.send("");
             console.log("failed to create a user");
         }
-    }).catch(error => console.log(error.message));
+    }).catch(error => {
+        console.log(error.message);
+        res.status(406);
+        res.send("");
+    });
+});
+router.post('/login', (req, res) => {
+    let body = req.body;
+    let email = body.email;
+    let password = body.password;
+    (0, users_1.loginUser)(email, password).then((accountName) => {
+        res.status(201);
+        res.send(accountName);
+        console.log(`${accountName} logged in`);
+    }).catch(error => {
+        console.log(error.message);
+        res.status(406);
+        res.send("");
+    });
 });
 module.exports = router;

@@ -42,12 +42,10 @@ function SignupMenu(props: any) {
         // TODO: finish this
             .then((response) => {
                 if(response.ok) {
-                    // TODO: git the post request
-                    let responseJSON = response
-                    props.loginFunction(responseJSON);
+                    response.json().then((data) => props.loginFunction(data))
                 }
                 else {
-                    // TODO: add error when creation of account failed
+                    console.log("failed to sign up");
                 }
             })
     }

@@ -1,12 +1,7 @@
-// Importing SQLite3 to our project.
 var sqlite3 = require("sqlite3").verbose();
+import { getLikeCount } from "./likes";
 // Setting up a database for storing data.
 var db = new sqlite3.Database("./db/db.sqlite");
-
-db.serialize(function () {
-    // Create a table if doesn't exist
-    db.run("CREATE TABLE IF NOT EXISTS twits (id TEXT,isVerified Boolean,userName TEXT,acountName TEXT,timeposted BIGINT, content TEXT,accountImgUrl TEXT,postImage TEXT,numberOfComments INT,numberOfRetwits INT,numberOfLikes INT)");
-})
 
 interface TwitProps {
     id: string
@@ -22,10 +17,15 @@ interface TwitProps {
     numberOfLikes: number
 }
 
+/***
+ * adding
+ * 
+ */
 function addTwit(data: TwitProps): Promise<boolean> {
+    //TODO: add check that account exist
     const promise = new Promise<boolean>((resolve, reject) => {
         // Add a twit to the table..
-        db.run("INSERT INTO twits (id, isVerified, userName, acountName, timeposted, content, accountImgUrl, postImage, numberOfComments, numberOfRetwits, numberOfLikes) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+        db.run("INSERT INTO twits (id, isVerified, userName, acountName, timeposted, content, accountImgUrl, postImage) VALUES (?,?,?,?,?,?,?,?)",
             [data.id,
             data.isVerified,
             data.userName,
@@ -33,10 +33,7 @@ function addTwit(data: TwitProps): Promise<boolean> {
             data.timeposted,
             data.content,
             data.accountImgUrl,
-            data.postImage,
-            data.numberOfComments,
-            data.numberOfRetwits,
-            data.numberOfLikes],
+            data.postImage],
             function (error: Error) {
                 if (error) {
                     reject(new Error("error"));
@@ -51,26 +48,29 @@ function addTwit(data: TwitProps): Promise<boolean> {
 
 }
 
-function getTwits(twitsCount?: number, twitsNotToGet?: Array<string>): Promise<Array<TwitProps>> {
-    const promise = new Promise<Array<TwitProps>>((resolve, reject) => {
-        let twits: Array<TwitProps> = []
+function getTwits(twitsCount?: number, twitsNotToGet?: Array<string>): Promise<Array<Promise<TwitProps>>> {
+    const promise = new Promise<Array<Promise<TwitProps>>>(async (resolve, reject) => {
+        let twits: Array<Promise<TwitProps>> = []
         db.each('select * from twits',
-            (err: Error, row: any) => {
-                let twit: TwitProps = {
-                    id: row.id,
-                    isVerified: row.isVerified == 1,
-                    userName: row.userName,
-                    acountName: row.acountName,
-                    timeposted: row.timeposted,
-                    content: row.content,
-                    accountImgUrl: row.accountImgUrl,
-                    postImage: row.postImage,
-                    numberOfComments: row.numberOfComments,
-                    numberOfRetwits: row.numberOfRetwits,
-                    numberOfLikes: row.numberOfLikes
-                }
-                twits.push(twit)
-            }, (error: Error) => {
+            async (err: Error, row: any) => {
+                const twitPromiss = new Promise<TwitProps>(async (resolve, reject) => {
+                    let twit: TwitProps = {
+                        id: row.id,
+                        isVerified: row.isVerified == 1,
+                        userName: row.userName,
+                        acountName: row.acountName,
+                        timeposted: row.timeposted,
+                        content: row.content,
+                        accountImgUrl: row.accountImgUrl,
+                        postImage: row.postImage,
+                        numberOfComments: 0,
+                        numberOfRetwits: 0,
+                        numberOfLikes: await getLikeCount(row.id).then((likes) => likes).catch(() => 0)
+                    }
+                    resolve(twit)
+                })
+                twits.push(twitPromiss)
+            }, async (error: Error) => {
                 if (error) {
                     reject(new Error("error"));
                 }

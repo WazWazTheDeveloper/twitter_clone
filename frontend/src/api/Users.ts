@@ -7,24 +7,42 @@ export interface User {
 }
 
 function RequestCreateNewAccount(user: User) {
-        let options: RequestInit = {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(
-                {
-                    "email": user.email,
-                    "password": user.password,
-                    "userName": user.userName,
-                    "accountName": user.accountName,
-                    "accountImgUrl": user.accountImgUrl
-                }
-            )
-        }
+    let options: RequestInit = {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(
+            {
+                "email": user.email,
+                "password": user.password,
+                "userName": user.userName,
+                "accountName": user.accountName,
+                "accountImgUrl": user.accountImgUrl
+            }
+        )
+    }
 
-        return fetch("/users/createUser", options)
+    return fetch("/users/createUser", options)
 }
 
-export { RequestCreateNewAccount }
+function RequestLogin(email:string,password:string) {
+    let options: RequestInit = {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(
+            {
+                "email": email,
+                "password": password
+            }
+        )
+    }
+
+    return fetch("/users/login", options)
+}
+
+export { RequestCreateNewAccount,RequestLogin }
