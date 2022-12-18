@@ -36,6 +36,12 @@ function getTwits(pageNumber = 1): Promise<TwitProps[]> {
         .then(data => {return data})
 }
 
+function getTwit(twitId:string): Promise<TwitProps> {   
+    return fetch(`/twits/getTwit?twitId=${twitId}`)
+        .then(response => response.json())
+        .then(data => {return data})
+}
+
 /**
  * send a request to update twit
  * @returns a promise
@@ -77,7 +83,7 @@ function deleteTwit(idToDelete: string, next ?: Function): Promise<any> {
     return fetch("/twits/deleteTwit", options)
 }
 
-function likeTwit(twitId: string, accountName:string): Promise<any> {
+async function likeTwit(twitId: string, accountName:string): Promise<any> {
     let options: RequestInit = {
         method: 'POST',
         credentials: 'include',
@@ -95,4 +101,4 @@ function likeTwit(twitId: string, accountName:string): Promise<any> {
     return fetch("/twits/liketwit", options)
 }
 
-export { createTwit ,getTwits, deleteTwit, updateTwits, likeTwit}
+export { createTwit ,getTwits, deleteTwit, updateTwits, likeTwit,getTwit}

@@ -91,7 +91,6 @@ router.get('/', (req, res) => {
 });
 router.get('/getTwits', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // add response based on pagenumber
-    console.log(req.query);
     // TODO: add catch after then
     (0, twit_1.getTwits)().then((data) => {
         Promise.all(data).then(data => {
@@ -99,6 +98,20 @@ router.get('/getTwits', (req, res) => __awaiter(void 0, void 0, void 0, function
             console.log("twits send");
         });
     });
+}));
+router.get('/getTwit', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // add response based on pagenumber
+    if (req.query.twitId != undefined) {
+        // @ts-ignore
+        let id = req.query.twitId;
+        (0, twit_1.getTwit)(id).then((data) => {
+            res.send(data);
+            console.log(`${id} was resend`);
+            //may couse a problem of crashing later
+        }).catch(() => {
+            console.log("error");
+        });
+    }
 }));
 router.post('/createTwit', (req, res) => {
     let newTwit = {
@@ -130,7 +143,6 @@ router.post('/updateTwit', (req, res) => {
 });
 router.delete('/deleteTwit', (req, res) => {
     // TODO: add catch after then
-    console.log(req.body.id);
     (0, twit_1.deleteTwit)(req.body.id).then(() => {
         res.send();
         console.log("twits deleted");
@@ -140,7 +152,6 @@ router.post('/liketwit', (req, res) => {
     let accountName = req.body.accountName;
     let twitId = req.body.twitId;
     (0, likes_1.isPostLiked)(accountName, twitId).then((isLiked) => {
-        console.log(isLiked + " router");
         if (isLiked) {
             (0, likes_1.dislikePost)(accountName, twitId).then(() => {
                 res.send();

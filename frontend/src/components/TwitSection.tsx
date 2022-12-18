@@ -2,7 +2,7 @@ import Twit from './Twit';
 import CreateTwit from './CreateTwit';
 import { useEffect, useState } from 'react';
 import { TwitProps } from './Twit'
-import {getTwits} from '../api/Twits'
+import { getTwits, getTwit } from '../api/Twits'
 
 function TwitSection(props: any) {
     const [twits, setTwits] = useState<TwitProps[]>([])
@@ -21,16 +21,29 @@ function TwitSection(props: any) {
         getTwits().then(data => setTwits(data))
     }
 
+    /***
+     * sends a request to update a specipic twit
+     */
+    function getUpdatedTwit(twitId: string) {
+        getTwit(twitId).then(data => {
+            setTwits(twits.map((oldTwit) => {
+                if(oldTwit.id == data.id) {
+                    return data
+                }
+                return oldTwit
+            }))
+        })
+    }
+
     /**
      * creates the twit elements
      */
     let twitsComp = twits.map((twit) => {
-        console.log(twits)
-        return (<Twit accountName={props.accountName} key={twit.id} data={twit} updateTwits={updateTwits}/>)
+        return (<Twit accountName={props.accountName} getUpdatedTwit={getUpdatedTwit} key={twit.id} data={twit} updateTwits={updateTwits} />)
     })
     return (
         <>
-            <CreateTwit accountName={props.accountName} updateTwits={updateTwits}/>
+            <CreateTwit accountName={props.accountName} updateTwits={updateTwits} />
             {twitsComp}
         </>
     )

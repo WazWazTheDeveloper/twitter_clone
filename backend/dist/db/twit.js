@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateTwit = exports.deleteTwit = exports.getTwits = exports.addTwit = void 0;
+exports.getTwit = exports.updateTwit = exports.deleteTwit = exports.getTwits = exports.addTwit = void 0;
 var sqlite3 = require("sqlite3").verbose();
 const likes_1 = require("./likes");
 // Setting up a database for storing data.
@@ -41,6 +41,38 @@ function addTwit(data) {
     return promise;
 }
 exports.addTwit = addTwit;
+function getTwit(twitId) {
+    let twitPromiss;
+    const promise = new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
+        db.each(`SELECT * FROM twits WHERE id=?`, [twitId], (err, row) => __awaiter(this, void 0, void 0, function* () {
+            twitPromiss = new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
+                let twit = {
+                    id: row.id,
+                    isVerified: row.isVerified == 1,
+                    userName: row.userName,
+                    acountName: row.acountName,
+                    timeposted: row.timeposted,
+                    content: row.content,
+                    accountImgUrl: row.accountImgUrl,
+                    postImage: row.postImage,
+                    numberOfComments: 0,
+                    numberOfRetwits: 0,
+                    numberOfLikes: yield (0, likes_1.getLikeCount)(row.id).then((likes) => likes).catch(() => 0)
+                };
+                resolve(twit);
+            }));
+        }), (error) => __awaiter(this, void 0, void 0, function* () {
+            if (error) {
+                reject(error);
+            }
+            else {
+                resolve(twitPromiss);
+            }
+        }));
+    }));
+    return promise;
+}
+exports.getTwit = getTwit;
 function getTwits(twitsCount, twitsNotToGet) {
     const promise = new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
         let twits = [];

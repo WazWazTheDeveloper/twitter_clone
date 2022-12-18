@@ -5,8 +5,6 @@ var db = new sqlite3.Database("./db/db.sqlite");
 
 function dislikePost(accountName: string, twitId: string): Promise<boolean> {
     console.log("disliked");
-    console.log(accountName);
-    console.log(twitId);
 
     const promise = new Promise<boolean>((resolve, reject) => {
         db.run(`DELETE FROM likes WHERE accountName=? and id=?`, [accountName, twitId],
@@ -25,9 +23,6 @@ function dislikePost(accountName: string, twitId: string): Promise<boolean> {
 
 function likePost(accountName: string, twitId: string): Promise<boolean> {
     console.log("liked");
-    
-    console.log(accountName);
-    console.log(twitId);
 
     const promise = new Promise<boolean>((resolve, reject) => {
         db.run(`

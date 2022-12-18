@@ -24,6 +24,7 @@ function LoginMenu(props: any) {
             .then((response) => {
                 if(response.ok) {
                     response.json().then((data) => props.loginFunction(data))
+                    props.closeWindow()
                 }
                 else {
                     console.log("failed to log in");

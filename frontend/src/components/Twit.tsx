@@ -23,6 +23,7 @@ interface Props {
     data: TwitProps
     updateTwits: Function
     accountName: string
+    getUpdatedTwit: Function
 }
 
 function Twit(props: Props) {
@@ -32,8 +33,9 @@ function Twit(props: Props) {
     /***
      * handles the actions when user click the like button
      */
-    function handleOnClickLike() {
-        likeTwit(props.data.id ,props.accountName)
+    async function handleOnClickLike() {
+        await likeTwit(props.data.id ,props.accountName)
+        props.getUpdatedTwit(props.data.id)
     }
 
     /**

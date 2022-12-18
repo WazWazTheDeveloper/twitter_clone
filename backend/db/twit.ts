@@ -48,6 +48,41 @@ function addTwit(data: TwitProps): Promise<boolean> {
 
 }
 
+function getTwit(twitId: string): Promise<Promise<TwitProps>> {
+    let twitPromiss: Promise<TwitProps>
+    const promise = new Promise<Promise<TwitProps>>(async (resolve, reject) => {
+        db.each(`SELECT * FROM twits WHERE id=?`, [twitId],
+            async (err: Error, row: any) => {
+                twitPromiss = new Promise<TwitProps>(async (resolve, reject) => {
+                    let twit: TwitProps = {
+                        id: row.id,
+                        isVerified: row.isVerified == 1,
+                        userName: row.userName,
+                        acountName: row.acountName,
+                        timeposted: row.timeposted,
+                        content: row.content,
+                        accountImgUrl: row.accountImgUrl,
+                        postImage: row.postImage,
+                        numberOfComments: 0,
+                        numberOfRetwits: 0,
+                        numberOfLikes: await getLikeCount(row.id).then((likes) => likes).catch(() => 0)
+                    }
+                    resolve(twit)
+                })
+            }, async (error: Error) => {
+                if (error) {
+                    reject(error);
+                }
+                else {
+                    resolve(twitPromiss)
+                }
+            })
+
+        }
+        )
+    return promise
+}
+
 function getTwits(twitsCount?: number, twitsNotToGet?: Array<string>): Promise<Array<Promise<TwitProps>>> {
     const promise = new Promise<Array<Promise<TwitProps>>>(async (resolve, reject) => {
         let twits: Array<Promise<TwitProps>> = []
@@ -103,4 +138,4 @@ function updateTwit(newData: any) {
     // const promise = new Promise<boolean>((resolve, reject) => {
     db.run('UPDATE twits SET content=?, postImage=? WHERE (id=?)', [newData.content, newData.postImage, newData.id])
 }
-export { addTwit, getTwits, deleteTwit, updateTwit }
+export { addTwit, getTwits, deleteTwit, updateTwit,getTwit }

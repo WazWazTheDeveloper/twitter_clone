@@ -6,8 +6,6 @@ var sqlite3 = require("sqlite3").verbose();
 var db = new sqlite3.Database("./db/db.sqlite");
 function dislikePost(accountName, twitId) {
     console.log("disliked");
-    console.log(accountName);
-    console.log(twitId);
     const promise = new Promise((resolve, reject) => {
         db.run(`DELETE FROM likes WHERE accountName=? and id=?`, [accountName, twitId], function (error) {
             if (error) {
@@ -23,8 +21,6 @@ function dislikePost(accountName, twitId) {
 exports.dislikePost = dislikePost;
 function likePost(accountName, twitId) {
     console.log("liked");
-    console.log(accountName);
-    console.log(twitId);
     const promise = new Promise((resolve, reject) => {
         db.run(`
             INSERT INTO likes (accountName,id)

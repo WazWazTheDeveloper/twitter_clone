@@ -2,7 +2,7 @@ import express, { Request, Response } from "express";
 const router = express.Router()
 import { v4 as uuidv4 } from 'uuid'
 import { isPostLiked, likePost, dislikePost } from "../db/likes";
-import { addTwit, deleteTwit, getTwits, updateTwit } from "../db/twit";
+import { addTwit, deleteTwit, getTwits, updateTwit, getTwit } from "../db/twit";
 
 interface TwitProps {
     id: string
@@ -95,7 +95,6 @@ router.get('/', (req: Request, res: Response) => {
 
 router.get('/getTwits', async (req: Request, res: Response) => {
     // add response based on pagenumber
-    console.log(req.query);
 
     // TODO: add catch after then
     getTwits().then((data: any) => {
@@ -105,6 +104,21 @@ router.get('/getTwits', async (req: Request, res: Response) => {
         })
     })
 
+})
+
+router.get('/getTwit', async (req: Request, res: Response) => {
+    // add response based on pagenumber
+    if (req.query.twitId != undefined) {
+        // @ts-ignore
+        let id: string = req.query.twitId
+        getTwit(id).then((data: any) => {
+            res.send(data)
+            console.log(`${id} was resend`);
+            //may couse a problem of crashing later
+        }).catch(() => {
+            console.log("error");
+        })
+    }
 })
 
 router.post('/createTwit', (req: Request, res: Response) => {
@@ -142,7 +156,6 @@ router.post('/updateTwit', (req: Request, res: Response) => {
 
 router.delete('/deleteTwit', (req: Request, res: Response) => {
     // TODO: add catch after then
-    console.log(req.body.id);
     deleteTwit(req.body.id).then(() => {
         res.send();
         console.log("twits deleted");
@@ -154,9 +167,7 @@ router.post('/liketwit', (req: Request, res: Response) => {
     let accountName = req.body.accountName
     let twitId = req.body.twitId
     isPostLiked(accountName, twitId).then((isLiked) => {
-        console.log(isLiked + " router");
-        
-        if(isLiked){
+        if (isLiked) {
             dislikePost(accountName, twitId).then(() => {
                 res.send();
                 console.log(`${twitId} got a dislike`);
