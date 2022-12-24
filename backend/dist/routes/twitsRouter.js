@@ -16,7 +16,9 @@ const express_1 = __importDefault(require("express"));
 const router = express_1.default.Router();
 const uuid_1 = require("uuid");
 const likes_1 = require("../db/likes");
+const shares_1 = require("../db/shares");
 const twit_1 = require("../db/twit");
+const users_1 = require("../db/users");
 // TODO: dont remove just in case of need for a banch of data
 // const temp_data: any = {
 //     twits: [
@@ -113,15 +115,15 @@ router.get('/getTwit', (req, res) => __awaiter(void 0, void 0, void 0, function*
         });
     }
 }));
-router.post('/createTwit', (req, res) => {
+router.post('/createTwit', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let newTwit = {
         "id": (0, uuid_1.v4)(),
         "isVerified": true,
-        "userName": req.body.userName,
+        "userName": yield (0, users_1.getUserFromAccountName)(req.body.acountName).then((userName) => userName).catch(() => ""),
         "acountName": req.body.acountName,
         "timeposted": req.body.timeposted,
         "content": req.body.content,
-        "accountImgUrl": "https://pbs.twimg.com/profile_images/1539412982190329862/90rLsmfU_400x400.jpg",
+        "accountImgUrl": yield (0, users_1.getAccountImgUrlFromAccountName)(req.body.acountName).then((ImgUrl) => ImgUrl).catch(() => ""),
         "postImage": req.body.postImage,
         "numberOfComments": 0,
         "numberOfRetwits": 0,
@@ -133,7 +135,7 @@ router.post('/createTwit', (req, res) => {
         res.send();
         console.log("twits created");
     });
-});
+}));
 router.post('/updateTwit', (req, res) => {
     // TODO: make it wait until the update is complate
     (0, twit_1.updateTwit)(req.body);
@@ -162,6 +164,25 @@ router.post('/liketwit', (req, res) => {
             (0, likes_1.likePost)(accountName, twitId).then(() => {
                 res.send();
                 console.log(`${twitId} got a like`);
+            });
+        }
+    }).catch(() => {
+    });
+});
+router.post('/sharetwit', (req, res) => {
+    let accountName = req.body.accountName;
+    let twitId = req.body.twitId;
+    (0, shares_1.isPostShared)(accountName, twitId).then((isShared) => {
+        if (isShared) {
+            (0, shares_1.unsharePost)(accountName, twitId).then(() => {
+                res.send();
+                console.log(`${twitId} unshared`);
+            });
+        }
+        else {
+            (0, shares_1.sharePost)(accountName, twitId).then(() => {
+                res.send();
+                console.log(`${twitId} shared`);
             });
         }
     }).catch(() => {

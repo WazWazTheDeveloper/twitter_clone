@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import { getLikeCount } from "./db/likes";
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5001;
 var sqlite3 = require("sqlite3").verbose();
 
 // Setting up a database for storing data.
@@ -12,6 +12,8 @@ db.serialize(function () {
     db.run("CREATE TABLE IF NOT EXISTS twits (id TEXT,isVerified Boolean,userName TEXT,acountName TEXT,timeposted BIGINT, content TEXT,accountImgUrl TEXT,postImage TEXT,UNIQUE(id))");
     db.run("CREATE TABLE IF NOT EXISTS users (email TEXT NOT NULL, password TEXT NOT NULL, userName TEXT NOT NULL, accountName TEXT NOT NULL, accountImgUrl TEXT, UNIQUE(accountName),UNIQUE(email))");
     db.run("CREATE TABLE IF NOT EXISTS likes (accountName TEXT NOT NULL , id TEXT NOT NULL,UNIQUE(accountName,id))");
+    db.run("CREATE TABLE IF NOT EXISTS shares (accountName TEXT NOT NULL , id TEXT NOT NULL,UNIQUE(accountName,id))");
+    db.run("CREATE TABLE IF NOT EXISTS comments (accountName TEXT NOT NULL , id TEXT NOT NULL, comment TEXT NOT NULL,UNIQUE(accountName,id))");
 })
 
 app.use(express.json());

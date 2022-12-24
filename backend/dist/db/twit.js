@@ -8,10 +8,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getTwit = exports.updateTwit = exports.deleteTwit = exports.getTwits = exports.addTwit = void 0;
 var sqlite3 = require("sqlite3").verbose();
+const dayjs_1 = __importDefault(require("dayjs"));
 const likes_1 = require("./likes");
+const shares_1 = require("./shares");
+const users_1 = require("./users");
 // Setting up a database for storing data.
 var db = new sqlite3.Database("./db/db.sqlite");
 /***
@@ -19,6 +25,7 @@ var db = new sqlite3.Database("./db/db.sqlite");
  *
  */
 function addTwit(data) {
+    let timePosted = (0, dayjs_1.default)().valueOf();
     //TODO: add check that account exist
     const promise = new Promise((resolve, reject) => {
         // Add a twit to the table..
@@ -26,7 +33,7 @@ function addTwit(data) {
             data.isVerified,
             data.userName,
             data.acountName,
-            data.timeposted,
+            timePosted,
             data.content,
             data.accountImgUrl,
             data.postImage], function (error) {
@@ -53,10 +60,10 @@ function getTwit(twitId) {
                     acountName: row.acountName,
                     timeposted: row.timeposted,
                     content: row.content,
-                    accountImgUrl: row.accountImgUrl,
+                    accountImgUrl: yield (0, users_1.getAccountImgUrlFromAccountName)(row.acountName).then((ImgUrl) => ImgUrl).catch(() => ""),
                     postImage: row.postImage,
                     numberOfComments: 0,
-                    numberOfRetwits: 0,
+                    numberOfRetwits: yield (0, shares_1.getShareCount)(row.id).then((shares) => shares).catch(() => 0),
                     numberOfLikes: yield (0, likes_1.getLikeCount)(row.id).then((likes) => likes).catch(() => 0)
                 };
                 resolve(twit);
@@ -85,10 +92,10 @@ function getTwits(twitsCount, twitsNotToGet) {
                     acountName: row.acountName,
                     timeposted: row.timeposted,
                     content: row.content,
-                    accountImgUrl: row.accountImgUrl,
+                    accountImgUrl: yield (0, users_1.getAccountImgUrlFromAccountName)(row.acountName).then((ImgUrl) => ImgUrl).catch((err) => { console.log(err); return ""; }),
                     postImage: row.postImage,
                     numberOfComments: 0,
-                    numberOfRetwits: 0,
+                    numberOfRetwits: yield (0, shares_1.getShareCount)(row.id).then((shares) => shares).catch(() => 0),
                     numberOfLikes: yield (0, likes_1.getLikeCount)(row.id).then((likes) => likes).catch(() => 0)
                 };
                 resolve(twit);

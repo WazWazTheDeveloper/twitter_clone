@@ -2,7 +2,9 @@ import express, { Request, Response } from "express";
 const router = express.Router()
 import { v4 as uuidv4 } from 'uuid'
 import { isPostLiked, likePost, dislikePost } from "../db/likes";
+import { isPostShared, sharePost, unsharePost } from "../db/shares";
 import { addTwit, deleteTwit, getTwits, updateTwit, getTwit } from "../db/twit";
+import { getAccountImgUrlFromAccountName, getUserFromAccountName } from "../db/users";
 
 interface TwitProps {
     id: string
@@ -121,15 +123,16 @@ router.get('/getTwit', async (req: Request, res: Response) => {
     }
 })
 
-router.post('/createTwit', (req: Request, res: Response) => {
+router.post('/createTwit', async (req: Request, res: Response) => {
+
     let newTwit = {
         "id": uuidv4(),
         "isVerified": true,
-        "userName": req.body.userName,
+        "userName": await getUserFromAccountName(req.body.acountName).then((userName) => userName).catch(() => ""),
         "acountName": req.body.acountName,
         "timeposted": req.body.timeposted,
         "content": req.body.content,
-        "accountImgUrl": "https://pbs.twimg.com/profile_images/1539412982190329862/90rLsmfU_400x400.jpg",
+        "accountImgUrl": await getAccountImgUrlFromAccountName(req.body.acountName).then((ImgUrl) => ImgUrl).catch(() => ""),
         "postImage": req.body.postImage,
         "numberOfComments": 0,
         "numberOfRetwits": 0,
@@ -177,6 +180,29 @@ router.post('/liketwit', (req: Request, res: Response) => {
             likePost(accountName, twitId).then(() => {
                 res.send();
                 console.log(`${twitId} got a like`);
+            })
+        }
+
+    }).catch(() => {
+    })
+
+
+})
+
+router.post('/sharetwit', (req: Request, res: Response) => {
+    let accountName = req.body.accountName
+    let twitId = req.body.twitId
+    isPostShared(accountName, twitId).then((isShared) => {
+        if (isShared) {
+            unsharePost(accountName, twitId).then(() => {
+                res.send();
+                console.log(`${twitId} unshared`);
+            })
+        }
+        else {
+            sharePost(accountName, twitId).then(() => {
+                res.send();
+                console.log(`${twitId} shared`);
             })
         }
 

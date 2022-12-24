@@ -47,6 +47,39 @@ function createUserInDB(user: User): Promise<boolean> {
     return promise
 }
 
+async function getUserFromAccountName(accountName:string) {
+    const promise = new Promise<string>((resolve, reject) => {
+        db.each('SELECT userName FROM users WHERE accountName=?',[accountName],
+        function(error: Error,row:any){
+            if (error) {
+                    reject(new Error("failed to accses"))
+            }
+            else {
+                    resolve(row.userName)
+            }
+        },()=>{console.log("done");})
+    });
+
+    return promise
+}
+
+async function getAccountImgUrlFromAccountName(accountName:string) {
+    const promise = new Promise<string>((resolve, reject) => {
+        db.each('SELECT accountImgUrl FROM users WHERE accountName=?',[accountName],
+        function(error: Error,row:any){
+            if (error) {
+                    reject(new Error("failed to retrive"))
+            }
+            else {
+                    console.log(row.accountImgUrl);
+                    resolve(row.accountImgUrl)
+            }
+        },()=>{reject(new Error("failed to accses"))})
+    });
+
+    return promise
+}
+
 /***
  * check if email and password match users
  * @param email - email to be checked
@@ -68,4 +101,4 @@ function loginUser(email: string, password: string): Promise<string> {
     return promise
 }
 
-export { createUserInDB,loginUser }
+export { createUserInDB,loginUser,getUserFromAccountName,getAccountImgUrlFromAccountName }

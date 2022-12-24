@@ -16,7 +16,7 @@ function createTwit(twitContent: string,accountName:string,twitImg?: string): Pr
         body: JSON.stringify(
             {
                 "userName": "Steve Harvey",
-                "acountName": "@IAmSteveHarvey",
+                "acountName": accountName,
                 "timeposted": dayjs().valueOf(),
                 "content": twitContent,
                 "postImage": "",
@@ -101,4 +101,22 @@ async function likeTwit(twitId: string, accountName:string): Promise<any> {
     return fetch("/twits/liketwit", options)
 }
 
-export { createTwit ,getTwits, deleteTwit, updateTwits, likeTwit,getTwit}
+async function shareTwit(twitId: string, accountName:string): Promise<any> {
+    let options: RequestInit = {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(
+            {
+                "twitId": twitId,
+                "accountName": accountName,
+            }
+        )
+    }
+
+    return fetch("/twits/sharetwit", options)
+}
+
+export { createTwit ,getTwits, deleteTwit, updateTwits, likeTwit,getTwit,shareTwit}

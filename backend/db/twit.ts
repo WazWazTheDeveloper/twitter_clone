@@ -1,5 +1,8 @@
 var sqlite3 = require("sqlite3").verbose();
+import dayjs from "dayjs";
 import { getLikeCount } from "./likes";
+import { getShareCount } from "./shares";
+import { getAccountImgUrlFromAccountName } from "./users";
 // Setting up a database for storing data.
 var db = new sqlite3.Database("./db/db.sqlite");
 
@@ -22,6 +25,7 @@ interface TwitProps {
  * 
  */
 function addTwit(data: TwitProps): Promise<boolean> {
+    let timePosted = dayjs().valueOf();
     //TODO: add check that account exist
     const promise = new Promise<boolean>((resolve, reject) => {
         // Add a twit to the table..
@@ -30,7 +34,7 @@ function addTwit(data: TwitProps): Promise<boolean> {
             data.isVerified,
             data.userName,
             data.acountName,
-            data.timeposted,
+            timePosted,
             data.content,
             data.accountImgUrl,
             data.postImage],
@@ -61,10 +65,10 @@ function getTwit(twitId: string): Promise<Promise<TwitProps>> {
                         acountName: row.acountName,
                         timeposted: row.timeposted,
                         content: row.content,
-                        accountImgUrl: row.accountImgUrl,
+                        accountImgUrl: await getAccountImgUrlFromAccountName(row.acountName).then((ImgUrl) => ImgUrl).catch(() => ""),
                         postImage: row.postImage,
                         numberOfComments: 0,
-                        numberOfRetwits: 0,
+                        numberOfRetwits: await getShareCount(row.id).then((shares) => shares).catch(() => 0),
                         numberOfLikes: await getLikeCount(row.id).then((likes) => likes).catch(() => 0)
                     }
                     resolve(twit)
@@ -96,10 +100,10 @@ function getTwits(twitsCount?: number, twitsNotToGet?: Array<string>): Promise<A
                         acountName: row.acountName,
                         timeposted: row.timeposted,
                         content: row.content,
-                        accountImgUrl: row.accountImgUrl,
+                        accountImgUrl: await getAccountImgUrlFromAccountName(row.acountName).then((ImgUrl) => ImgUrl).catch((err) => {console.log(err); return""}),
                         postImage: row.postImage,
                         numberOfComments: 0,
-                        numberOfRetwits: 0,
+                        numberOfRetwits: await getShareCount(row.id).then((shares) => shares).catch(() => 0),
                         numberOfLikes: await getLikeCount(row.id).then((likes) => likes).catch(() => 0)
                     }
                     resolve(twit)
