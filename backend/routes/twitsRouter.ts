@@ -2,8 +2,7 @@ import express, { Request, Response } from "express";
 const router = express.Router()
 import { v4 as uuidv4 } from 'uuid'
 import { isPostLiked, likePost, dislikePost } from "../db/likes";
-import { isPostShared, sharePost, unsharePost } from "../db/shares";
-import { addTwit, deleteTwit, getTwits, updateTwit, getTwit } from "../db/twit";
+import { addTwit, deleteTwit, getTwits, updateTwit, getTwit, retwitPost } from "../db/twit";
 import { getAccountImgUrlFromAccountName, getUserFromAccountName } from "../db/users";
 
 interface TwitProps {
@@ -189,26 +188,27 @@ router.post('/liketwit', (req: Request, res: Response) => {
 
 })
 
-router.post('/sharetwit', (req: Request, res: Response) => {
+router.post('/retwittwit', (req: Request, res: Response) => {
     let accountName = req.body.accountName
     let twitId = req.body.twitId
-    isPostShared(accountName, twitId).then((isShared) => {
-        if (isShared) {
-            unsharePost(accountName, twitId).then(() => {
-                res.send();
-                console.log(`${twitId} unshared`);
-            })
-        }
-        else {
-            sharePost(accountName, twitId).then(() => {
-                res.send();
-                console.log(`${twitId} shared`);
-            })
-        }
-
-    }).catch(() => {
+    retwitPost(accountName, twitId).then(() => {
+        res.send();
+        console.log(`${twitId} retwited`);
     })
 
+    // isPostShared(accountName, twitId).then((isShared) => {
+    //     if (isShared) {
+    //         unsharePost(accountName, twitId).then(() => {
+    //             res.send();
+    //             console.log(`${twitId} unshared`);
+    //         })
+    //     }
+    //     else {
+    //     }
+
+
+    // }).catch(() => {
+    // })
 
 })
 

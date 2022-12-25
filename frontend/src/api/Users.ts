@@ -45,4 +45,17 @@ function RequestLogin(email:string,password:string) {
     return fetch("/users/login", options)
 }
 
-export { RequestCreateNewAccount,RequestLogin }
+function RequestAccountImgUrlFromAccountName(accountName:string) {
+    let options: RequestInit = {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    }
+
+
+    return fetch(`/users/getAccountImgUrlFromAccountName?accountName=${accountName}`, options)
+}
+
+export { RequestCreateNewAccount,RequestLogin ,RequestAccountImgUrlFromAccountName}

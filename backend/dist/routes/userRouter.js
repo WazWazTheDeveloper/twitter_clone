@@ -48,4 +48,17 @@ router.post('/login', (req, res) => {
         res.send("");
     });
 });
+router.get('/getAccountImgUrlFromAccountName', (req, res) => {
+    let body = req.query;
+    // @ts-ignore
+    (0, users_1.getAccountImgUrlFromAccountName)(body.accountName).then((imgUrl) => {
+        res.status(201);
+        res.send(imgUrl);
+        console.log(`${imgUrl} accountImg was sent`);
+    }).catch(error => {
+        console.log(error.message);
+        res.status(406);
+        res.send("");
+    });
+});
 module.exports = router;

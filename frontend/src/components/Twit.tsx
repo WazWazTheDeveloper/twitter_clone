@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import './Twit.css';
 import verification_icon from '../assets/verified.png'
+import default_img from '../assets/default-img.png'
 import dayjs from 'dayjs';
-import { deleteTwit, updateTwits, likeTwit, shareTwit } from '../api/Twits'
+import { deleteTwit, updateTwits, likeTwit,retwitTwit} from '../api/Twits'
 
 
 export interface TwitProps {
@@ -41,10 +42,13 @@ function Twit(props: Props) {
     /***
     * handles the actions when user click the share button
     */
-    async function handleOnClickShare() {
-        await shareTwit(props.data.id, props.accountName)
+    async function handleOnClickRetwit() {        
+        // TODO: add the actual retwit part
+        await retwitTwit(props.data.id, props.accountName)
         props.getUpdatedTwit(props.data.id)
     }
+
+    
 
     /**
     * handles the action when user what to delete a twit
@@ -108,7 +112,8 @@ function Twit(props: Props) {
         <div className='twit-body'>
             <div className='twit-devider'>
                 <div className='twit-devider-photo'>
-                    <img className='twit-img' src={props.data.accountImgUrl} alt="profile" />
+                    {/* TODO: add check if accountImgUrl is a valid url*/}
+                    <img className='twit-img' src={props.data.accountImgUrl!="" ? props.data.accountImgUrl:default_img} alt="profile" />
                 </div>
                 <div className='twit-devider-text'>
                     <div className='twit-devider-text-upperpart'>
@@ -136,7 +141,7 @@ function Twit(props: Props) {
                         <p>{props.data.numberOfComments}</p>
                     </div>
                 </div>
-                <div onClick={handleOnClickShare} className='twit-button-retwit'>
+                <div onClick={handleOnClickRetwit} className='twit-button-retwit'>
                     <div className='twit-button-retwit-warper'>
                         <div className='svg-warper'>
                             <svg viewBox="0 0 24 24" aria-hidden="true" className="r-4qtqp9 r-yyyyoo r-1xvli5t r-dnmrzs r-bnwqim r-1plcrui r-lrvibr r-1hdv0qi"><g><path d="M4.5 3.88l4.432 4.14-1.364 1.46L5.5 7.55V16c0 1.1.896 2 2 2H13v2H7.5c-2.209 0-4-1.79-4-4V7.55L1.432 9.48.068 8.02 4.5 3.88zM16.5 6H11V4h5.5c2.209 0 4 1.79 4 4v8.45l2.068-1.93 1.364 1.46-4.432 4.14-4.432-4.14 1.364-1.46 2.068 1.93V8c0-1.1-.896-2-2-2z"></path></g></svg>

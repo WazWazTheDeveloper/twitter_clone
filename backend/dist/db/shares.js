@@ -5,7 +5,7 @@ var sqlite3 = require("sqlite3").verbose();
 // Setting up a database for storing data.
 var db = new sqlite3.Database("./db/db.sqlite");
 function unsharePost(accountName, twitId) {
-    console.log("disliked");
+    console.log("unShared");
     const promise = new Promise((resolve, reject) => {
         db.run(`DELETE FROM shares WHERE accountName=? and id=?`, [accountName, twitId], function (error) {
             if (error) {
@@ -20,7 +20,7 @@ function unsharePost(accountName, twitId) {
 }
 exports.unsharePost = unsharePost;
 function sharePost(accountName, twitId) {
-    console.log("liked");
+    console.log("shared");
     const promise = new Promise((resolve, reject) => {
         db.run(`
             INSERT INTO shares (accountName,id)

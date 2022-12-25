@@ -1,7 +1,6 @@
 var sqlite3 = require("sqlite3").verbose();
 import dayjs from "dayjs";
 import { getLikeCount } from "./likes";
-import { getShareCount } from "./shares";
 import { getAccountImgUrlFromAccountName } from "./users";
 // Setting up a database for storing data.
 var db = new sqlite3.Database("./db/db.sqlite");
@@ -68,7 +67,7 @@ function getTwit(twitId: string): Promise<Promise<TwitProps>> {
                         accountImgUrl: await getAccountImgUrlFromAccountName(row.acountName).then((ImgUrl) => ImgUrl).catch(() => ""),
                         postImage: row.postImage,
                         numberOfComments: 0,
-                        numberOfRetwits: await getShareCount(row.id).then((shares) => shares).catch(() => 0),
+                        numberOfRetwits: await getRetwitCount(row.id).then((shares) => shares).catch(() => 0),
                         numberOfLikes: await getLikeCount(row.id).then((likes) => likes).catch(() => 0)
                     }
                     resolve(twit)
@@ -100,10 +99,10 @@ function getTwits(twitsCount?: number, twitsNotToGet?: Array<string>): Promise<A
                         acountName: row.acountName,
                         timeposted: row.timeposted,
                         content: row.content,
-                        accountImgUrl: await getAccountImgUrlFromAccountName(row.acountName).then((ImgUrl) => ImgUrl).catch((err) => {console.log(err); return""}),
+                        accountImgUrl: await getAccountImgUrlFromAccountName(row.acountName).then((ImgUrl) => ImgUrl).catch((err) => {return""}),
                         postImage: row.postImage,
                         numberOfComments: 0,
-                        numberOfRetwits: await getShareCount(row.id).then((shares) => shares).catch(() => 0),
+                        numberOfRetwits: await getRetwitCount(row.id).then((shares) => shares).catch(() => 0),
                         numberOfLikes: await getLikeCount(row.id).then((likes) => likes).catch(() => 0)
                     }
                     resolve(twit)
@@ -142,4 +141,48 @@ function updateTwit(newData: any) {
     // const promise = new Promise<boolean>((resolve, reject) => {
     db.run('UPDATE twits SET content=?, postImage=? WHERE (id=?)', [newData.content, newData.postImage, newData.id])
 }
-export { addTwit, getTwits, deleteTwit, updateTwit,getTwit }
+
+function retwitPost(accountName: string, twitId: string): Promise<boolean> {
+    console.log("shared");
+
+    const promise = new Promise<boolean>((resolve, reject) => {
+        db.run(`
+            INSERT INTO retwits (accountName,id)
+            SELECT *
+            FROM (VALUES (?,?))
+            WHERE EXISTS (SELECT accountName from users WHERE accountName==?)
+            `, [accountName, twitId, accountName],
+            function (error: Error) {
+                if (error) {
+                    reject(new Error("error"));
+                } else {
+                    resolve(true)
+                }
+            })
+    })
+
+    return promise
+
+}
+
+function getRetwitCount(postId: string):Promise<number> {
+    const promise = new Promise<number>((resolve, reject) => {
+        db.each(`
+            SELECT COUNT(*)
+            FROM twits
+            INNER JOIN retwits
+            ON twits.id = retwits.id
+            WHERE twits.id=?
+                `, [postId],
+            function (error: Error, row:any) {
+                if (error) {
+                    reject(new Error("error"));
+                } else {
+                    resolve(row["COUNT(*)"])
+                }
+            })
+    })
+
+    return promise
+}
+export { addTwit, getTwits, deleteTwit, updateTwit,getTwit ,retwitPost ,getRetwitCount}

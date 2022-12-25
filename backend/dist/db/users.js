@@ -67,7 +67,6 @@ function getAccountImgUrlFromAccountName(accountName) {
                     reject(new Error("failed to retrive"));
                 }
                 else {
-                    console.log(row.accountImgUrl);
                     resolve(row.accountImgUrl);
                 }
             }, () => { reject(new Error("failed to accses")); });

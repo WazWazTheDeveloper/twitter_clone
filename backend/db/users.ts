@@ -71,7 +71,6 @@ async function getAccountImgUrlFromAccountName(accountName:string) {
                     reject(new Error("failed to retrive"))
             }
             else {
-                    console.log(row.accountImgUrl);
                     resolve(row.accountImgUrl)
             }
         },()=>{reject(new Error("failed to accses"))})
@@ -101,4 +100,4 @@ function loginUser(email: string, password: string): Promise<string> {
     return promise
 }
 
-export { createUserInDB,loginUser,getUserFromAccountName,getAccountImgUrlFromAccountName }
+export { createUserInDB,loginUser,getUserFromAccountName,getAccountImgUrlFromAccountName}

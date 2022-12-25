@@ -101,7 +101,7 @@ async function likeTwit(twitId: string, accountName:string): Promise<any> {
     return fetch("/twits/liketwit", options)
 }
 
-async function shareTwit(twitId: string, accountName:string): Promise<any> {
+async function retwitTwit(twitId: string, accountName:string): Promise<any> {
     let options: RequestInit = {
         method: 'POST',
         credentials: 'include',
@@ -116,7 +116,7 @@ async function shareTwit(twitId: string, accountName:string): Promise<any> {
         )
     }
 
-    return fetch("/twits/sharetwit", options)
+    return fetch("/twits/retwittwit", options)
 }
 
-export { createTwit ,getTwits, deleteTwit, updateTwits, likeTwit,getTwit,shareTwit}
+export { createTwit ,getTwits, deleteTwit, updateTwits, likeTwit,getTwit,retwitTwit}

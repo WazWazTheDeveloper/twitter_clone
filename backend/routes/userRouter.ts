@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 const router = express.Router()
 import { v4 as uuidv4 } from 'uuid'
-import { User, createUserInDB, loginUser } from "../db/users";
+import { User, createUserInDB, loginUser, getAccountImgUrlFromAccountName } from "../db/users";
 
 router.post('/createUser', (req: Request, res: Response) => {
     // TODO: add check for un defined
@@ -48,6 +48,20 @@ router.post('/login', (req: Request, res: Response) => {
         res.send("");
     });
 
+})
+
+router.get('/getAccountImgUrlFromAccountName', (req: Request, res: Response) => {
+    let body = req.query
+    // @ts-ignore
+    getAccountImgUrlFromAccountName(body.accountName).then((imgUrl) => {
+        res.status(201)
+        res.send(imgUrl);
+        console.log(`${imgUrl} accountImg was sent`);
+    }).catch(error => {
+        console.log(error.message)
+        res.status(406)
+        res.send("");
+    });
 })
 
 module.exports = router

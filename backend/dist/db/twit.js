@@ -12,11 +12,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getTwit = exports.updateTwit = exports.deleteTwit = exports.getTwits = exports.addTwit = void 0;
+exports.getRetwitCount = exports.retwitPost = exports.getTwit = exports.updateTwit = exports.deleteTwit = exports.getTwits = exports.addTwit = void 0;
 var sqlite3 = require("sqlite3").verbose();
 const dayjs_1 = __importDefault(require("dayjs"));
 const likes_1 = require("./likes");
-const shares_1 = require("./shares");
 const users_1 = require("./users");
 // Setting up a database for storing data.
 var db = new sqlite3.Database("./db/db.sqlite");
@@ -63,7 +62,7 @@ function getTwit(twitId) {
                     accountImgUrl: yield (0, users_1.getAccountImgUrlFromAccountName)(row.acountName).then((ImgUrl) => ImgUrl).catch(() => ""),
                     postImage: row.postImage,
                     numberOfComments: 0,
-                    numberOfRetwits: yield (0, shares_1.getShareCount)(row.id).then((shares) => shares).catch(() => 0),
+                    numberOfRetwits: yield getRetwitCount(row.id).then((shares) => shares).catch(() => 0),
                     numberOfLikes: yield (0, likes_1.getLikeCount)(row.id).then((likes) => likes).catch(() => 0)
                 };
                 resolve(twit);
@@ -92,10 +91,10 @@ function getTwits(twitsCount, twitsNotToGet) {
                     acountName: row.acountName,
                     timeposted: row.timeposted,
                     content: row.content,
-                    accountImgUrl: yield (0, users_1.getAccountImgUrlFromAccountName)(row.acountName).then((ImgUrl) => ImgUrl).catch((err) => { console.log(err); return ""; }),
+                    accountImgUrl: yield (0, users_1.getAccountImgUrlFromAccountName)(row.acountName).then((ImgUrl) => ImgUrl).catch((err) => { return ""; }),
                     postImage: row.postImage,
                     numberOfComments: 0,
-                    numberOfRetwits: yield (0, shares_1.getShareCount)(row.id).then((shares) => shares).catch(() => 0),
+                    numberOfRetwits: yield getRetwitCount(row.id).then((shares) => shares).catch(() => 0),
                     numberOfLikes: yield (0, likes_1.getLikeCount)(row.id).then((likes) => likes).catch(() => 0)
                 };
                 resolve(twit);
@@ -132,3 +131,43 @@ function updateTwit(newData) {
     db.run('UPDATE twits SET content=?, postImage=? WHERE (id=?)', [newData.content, newData.postImage, newData.id]);
 }
 exports.updateTwit = updateTwit;
+function retwitPost(accountName, twitId) {
+    console.log("shared");
+    const promise = new Promise((resolve, reject) => {
+        db.run(`
+            INSERT INTO retwits (accountName,id)
+            SELECT *
+            FROM (VALUES (?,?))
+            WHERE EXISTS (SELECT accountName from users WHERE accountName==?)
+            `, [accountName, twitId, accountName], function (error) {
+            if (error) {
+                reject(new Error("error"));
+            }
+            else {
+                resolve(true);
+            }
+        });
+    });
+    return promise;
+}
+exports.retwitPost = retwitPost;
+function getRetwitCount(postId) {
+    const promise = new Promise((resolve, reject) => {
+        db.each(`
+            SELECT COUNT(*)
+            FROM twits
+            INNER JOIN retwits
+            ON twits.id = retwits.id
+            WHERE twits.id=?
+                `, [postId], function (error, row) {
+            if (error) {
+                reject(new Error("error"));
+            }
+            else {
+                resolve(row["COUNT(*)"]);
+            }
+        });
+    });
+    return promise;
+}
+exports.getRetwitCount = getRetwitCount;

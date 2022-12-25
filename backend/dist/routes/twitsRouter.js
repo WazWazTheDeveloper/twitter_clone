@@ -16,7 +16,6 @@ const express_1 = __importDefault(require("express"));
 const router = express_1.default.Router();
 const uuid_1 = require("uuid");
 const likes_1 = require("../db/likes");
-const shares_1 = require("../db/shares");
 const twit_1 = require("../db/twit");
 const users_1 = require("../db/users");
 // TODO: dont remove just in case of need for a banch of data
@@ -169,23 +168,23 @@ router.post('/liketwit', (req, res) => {
     }).catch(() => {
     });
 });
-router.post('/sharetwit', (req, res) => {
+router.post('/retwittwit', (req, res) => {
     let accountName = req.body.accountName;
     let twitId = req.body.twitId;
-    (0, shares_1.isPostShared)(accountName, twitId).then((isShared) => {
-        if (isShared) {
-            (0, shares_1.unsharePost)(accountName, twitId).then(() => {
-                res.send();
-                console.log(`${twitId} unshared`);
-            });
-        }
-        else {
-            (0, shares_1.sharePost)(accountName, twitId).then(() => {
-                res.send();
-                console.log(`${twitId} shared`);
-            });
-        }
-    }).catch(() => {
+    (0, twit_1.retwitPost)(accountName, twitId).then(() => {
+        res.send();
+        console.log(`${twitId} retwited`);
     });
+    // isPostShared(accountName, twitId).then((isShared) => {
+    //     if (isShared) {
+    //         unsharePost(accountName, twitId).then(() => {
+    //             res.send();
+    //             console.log(`${twitId} unshared`);
+    //         })
+    //     }
+    //     else {
+    //     }
+    // }).catch(() => {
+    // })
 });
 module.exports = router;
