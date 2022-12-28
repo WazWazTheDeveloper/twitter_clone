@@ -6,7 +6,7 @@ import { TwitProps } from '../components/Twit'
  * @param twitContent content of the new twit
  * @param next a function to be fired after twit was created successfully
  */
-function createTwit(twitContent: string,accountName:string,twitImg?: string): Promise<any> {
+function createTwit(twitContent: string, accountName: string, twitImg=""): Promise<any> {
     let options: RequestInit = {
         method: 'POST',
         credentials: 'include',
@@ -15,11 +15,11 @@ function createTwit(twitContent: string,accountName:string,twitImg?: string): Pr
         },
         body: JSON.stringify(
             {
-                "userName": "Steve Harvey",
                 "acountName": accountName,
                 "timeposted": dayjs().valueOf(),
                 "content": twitContent,
-                "postImage": "",
+                "postImage": twitImg,
+                "retwitId": "",
             }
         )
     }
@@ -33,13 +33,13 @@ function createTwit(twitContent: string,accountName:string,twitImg?: string): Pr
 function getTwits(pageNumber = 1): Promise<TwitProps[]> {
     return fetch(`/twits/getTwits?pageNumber=${pageNumber}`)
         .then(response => response.json())
-        .then(data => {return data})
+        .then(data => { return data })
 }
 
-function getTwit(twitId:string): Promise<TwitProps> {   
+function getTwit(twitId: string): Promise<TwitProps> {
     return fetch(`/twits/getTwit?twitId=${twitId}`)
         .then(response => response.json())
-        .then(data => {return data})
+        .then(data => { return data })
 }
 
 /**
@@ -48,7 +48,7 @@ function getTwit(twitId:string): Promise<TwitProps> {
  * @param idToUpdate id of the twit to update
  * @param twitContent the updated content of the twit
  */
-function updateTwits(idToUpdate:string ,twitContent: string): Promise<any> {
+function updateTwits(idToUpdate: string, twitContent: string): Promise<any> {
     let options: RequestInit = {
         method: 'POST',
         credentials: 'include',
@@ -66,7 +66,7 @@ function updateTwits(idToUpdate:string ,twitContent: string): Promise<any> {
 
     return fetch("/twits/updateTwit", options)
 }
-function deleteTwit(idToDelete: string, next ?: Function): Promise<any> {
+function deleteTwit(idToDelete: string, next?: Function): Promise<any> {
     let options: RequestInit = {
         method: 'DELETE',
         credentials: 'include',
@@ -83,7 +83,7 @@ function deleteTwit(idToDelete: string, next ?: Function): Promise<any> {
     return fetch("/twits/deleteTwit", options)
 }
 
-async function likeTwit(twitId: string, accountName:string): Promise<any> {
+async function likeTwit(twitId: string, accountName: string): Promise<any> {
     let options: RequestInit = {
         method: 'POST',
         credentials: 'include',
@@ -101,7 +101,8 @@ async function likeTwit(twitId: string, accountName:string): Promise<any> {
     return fetch("/twits/liketwit", options)
 }
 
-async function retwitTwit(twitId: string, accountName:string): Promise<any> {
+async function retwitTwit(twitId: string, accountName: string, twitContent: string): Promise<any> {
+
     let options: RequestInit = {
         method: 'POST',
         credentials: 'include',
@@ -110,7 +111,11 @@ async function retwitTwit(twitId: string, accountName:string): Promise<any> {
         },
         body: JSON.stringify(
             {
-                "twitId": twitId,
+                "acountName": accountName,
+                "timeposted": dayjs().valueOf(),
+                "content": twitContent,
+                "postImage": "",
+                "retwitId": twitId,
                 "accountName": accountName,
             }
         )
@@ -119,4 +124,4 @@ async function retwitTwit(twitId: string, accountName:string): Promise<any> {
     return fetch("/twits/retwittwit", options)
 }
 
-export { createTwit ,getTwits, deleteTwit, updateTwits, likeTwit,getTwit,retwitTwit}
+export { createTwit, getTwits, deleteTwit, updateTwits, likeTwit, getTwit, retwitTwit }

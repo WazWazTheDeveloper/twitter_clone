@@ -17,7 +17,8 @@ interface TwitProps {
     numberOfComments: number
     numberOfRetwits: number
     numberOfLikes: number
-}
+    retwitId: string
+}           
 
 /***
  * adding
@@ -28,7 +29,7 @@ function addTwit(data: TwitProps): Promise<boolean> {
     //TODO: add check that account exist
     const promise = new Promise<boolean>((resolve, reject) => {
         // Add a twit to the table..
-        db.run("INSERT INTO twits (id, isVerified, userName, acountName, timeposted, content, accountImgUrl, postImage) VALUES (?,?,?,?,?,?,?,?)",
+        db.run("INSERT INTO twits (id, isVerified, userName, acountName, timeposted, content, accountImgUrl, postImage, retwitId) VALUES (?,?,?,?,?,?,?,?,?)",
             [data.id,
             data.isVerified,
             data.userName,
@@ -36,7 +37,8 @@ function addTwit(data: TwitProps): Promise<boolean> {
             timePosted,
             data.content,
             data.accountImgUrl,
-            data.postImage],
+            data.postImage,
+            data.retwitId],
             function (error: Error) {
                 if (error) {
                     reject(new Error("error"));
@@ -68,7 +70,8 @@ function getTwit(twitId: string): Promise<Promise<TwitProps>> {
                         postImage: row.postImage,
                         numberOfComments: 0,
                         numberOfRetwits: await getRetwitCount(row.id).then((shares) => shares).catch(() => 0),
-                        numberOfLikes: await getLikeCount(row.id).then((likes) => likes).catch(() => 0)
+                        numberOfLikes: await getLikeCount(row.id).then((likes) => likes).catch(() => 0),
+                        retwitId: row.retwitId
                     }
                     resolve(twit)
                 })
@@ -103,7 +106,8 @@ function getTwits(twitsCount?: number, twitsNotToGet?: Array<string>): Promise<A
                         postImage: row.postImage,
                         numberOfComments: 0,
                         numberOfRetwits: await getRetwitCount(row.id).then((shares) => shares).catch(() => 0),
-                        numberOfLikes: await getLikeCount(row.id).then((likes) => likes).catch(() => 0)
+                        numberOfLikes: await getLikeCount(row.id).then((likes) => likes).catch(() => 0),
+                        retwitId: row.retwitId
                     }
                     resolve(twit)
                 })

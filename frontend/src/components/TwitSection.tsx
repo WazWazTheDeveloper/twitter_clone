@@ -39,7 +39,7 @@ function TwitSection(props: any) {
      * creates the twit elements
      */
     let twitsComp = twits.map((twit) => {
-        return (<Twit accountName={props.accountName} getUpdatedTwit={getUpdatedTwit} key={twit.id} data={twit} updateTwits={updateTwits} />)
+        return (<Twit canContainRetwit={true} accountName={props.accountName} getUpdatedTwit={getUpdatedTwit} key={twit.id} data={twit} updateTwits={updateTwits} />)
     })
     return (
         <>

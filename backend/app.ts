@@ -9,7 +9,7 @@ var db = new sqlite3.Database("./db/db.sqlite");
 
 db.serialize(function () {
     // Create a table if doesn't exist
-    db.run("CREATE TABLE IF NOT EXISTS twits (id TEXT,isVerified Boolean,userName TEXT,acountName TEXT,timeposted BIGINT, content TEXT,accountImgUrl TEXT,postImage TEXT,UNIQUE(id))");
+    db.run("CREATE TABLE IF NOT EXISTS twits (id TEXT,isVerified Boolean,userName TEXT,acountName TEXT,timeposted BIGINT, content TEXT,accountImgUrl TEXT,postImage TEXT,retwitId TEXT,UNIQUE(id))");
     db.run("CREATE TABLE IF NOT EXISTS users (email TEXT NOT NULL, password TEXT NOT NULL, userName TEXT NOT NULL, accountName TEXT NOT NULL, accountImgUrl TEXT, UNIQUE(accountName),UNIQUE(email))");
     db.run("CREATE TABLE IF NOT EXISTS likes (accountName TEXT NOT NULL , id TEXT NOT NULL,UNIQUE(accountName,id))");
     db.run("CREATE TABLE IF NOT EXISTS retwits (accountName TEXT NOT NULL , id TEXT NOT NULL)");

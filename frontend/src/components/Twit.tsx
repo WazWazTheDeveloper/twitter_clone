@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Twit.css';
 import verification_icon from '../assets/verified.png'
 import default_img from '../assets/default-img.png'
 import dayjs from 'dayjs';
-import { deleteTwit, updateTwits, likeTwit,retwitTwit} from '../api/Twits'
+import { deleteTwit, updateTwits, likeTwit, retwitTwit, getTwit } from '../api/Twits'
 
 
 export interface TwitProps {
@@ -18,6 +18,7 @@ export interface TwitProps {
     numberOfComments: number
     numberOfRetwits: number
     numberOfLikes: number
+    retwitId: string
 }
 
 interface Props {
@@ -25,11 +26,34 @@ interface Props {
     updateTwits: Function
     accountName: string
     getUpdatedTwit: Function
+    canContainRetwit : boolean
+}
+
+const emptyTwit = {
+    id: "",
+    isVerified: false,
+    userName: "",
+    acountName: "",
+    timeposted: 0,
+    content: "",
+    accountImgUrl: "",
+    postImage: "",
+    numberOfComments: 0,
+    numberOfRetwits: 0,
+    numberOfLikes: 0,
+    retwitId: ""
 }
 
 function Twit(props: Props) {
     const [isTwitEditeable, setIsTwitEditable] = useState<boolean>(false) //saves the state of if the twit is editable
     const [twitContent, setTwitContent] = useState<string>(props.data.content) // saves the state of the content on the editedtwit
+    const [retwitData, setRetwitData] = useState<TwitProps>(emptyTwit);
+
+    useEffect(() => {
+        if (props.data.retwitId != "") {
+            getTwit(props.data.retwitId).then((data) => { setRetwitData(data) })
+        }
+    }, [])
 
     /***
      * handles the actions when user click the like button
@@ -37,18 +61,20 @@ function Twit(props: Props) {
     async function handleOnClickLike() {
         await likeTwit(props.data.id, props.accountName)
         props.getUpdatedTwit(props.data.id)
+        props.updateTwits()
     }
 
     /***
     * handles the actions when user click the share button
     */
-    async function handleOnClickRetwit() {        
+    async function handleOnClickRetwit() {
         // TODO: add the actual retwit part
-        await retwitTwit(props.data.id, props.accountName)
-        props.getUpdatedTwit(props.data.id)
+        await retwitTwit(props.data.id, props.accountName, "").then(() => {
+            props.updateTwits()
+        })
     }
 
-    
+
 
     /**
     * handles the action when user what to delete a twit
@@ -113,7 +139,7 @@ function Twit(props: Props) {
             <div className='twit-devider'>
                 <div className='twit-devider-photo'>
                     {/* TODO: add check if accountImgUrl is a valid url*/}
-                    <img className='twit-img' src={props.data.accountImgUrl!="" ? props.data.accountImgUrl:default_img} alt="profile" />
+                    <img className='twit-img' src={props.data.accountImgUrl != "" ? props.data.accountImgUrl : default_img} alt="profile" />
                 </div>
                 <div className='twit-devider-text'>
                     <div className='twit-devider-text-upperpart'>
@@ -124,7 +150,8 @@ function Twit(props: Props) {
                     </div>
                     <div contentEditable={true} onInput={handleTwitOnChange} className='twit-content' suppressContentEditableWarning={true}>{props.data.content}</div>
                     <div className='twit-post-image-conteiner'>
-                        <img className='twit-post-image' src={props.data.postImage} alt="" />
+                        {props.data.retwitId !== "" && props.canContainRetwit ? <Twit canContainRetwit={false} data={retwitData} getUpdatedTwit={props.getUpdatedTwit} accountName={props.accountName} updateTwits={props.updateTwits} /> : <></>}
+                        {(props.data.postImage != "" && props.data.retwitId == "" || !props.canContainRetwit) ? <img className='twit-post-image' src={props.data.postImage} alt="" /> : <></>}
                     </div>
                 </div>
                 <div className='twit-options'>

@@ -136,6 +136,7 @@ router.post('/createTwit', async (req: Request, res: Response) => {
         "numberOfComments": 0,
         "numberOfRetwits": 0,
         "numberOfLikes": 0,
+        "retwitId": req.body.retwitId
     }
 
     // TODO: add catch after then
@@ -188,27 +189,39 @@ router.post('/liketwit', (req: Request, res: Response) => {
 
 })
 
-router.post('/retwittwit', (req: Request, res: Response) => {
+router.post('/retwittwit', async (req: Request, res: Response) => {
     let accountName = req.body.accountName
-    let twitId = req.body.twitId
-    retwitPost(accountName, twitId).then(() => {
+
+    let newTwit = {
+        "id": uuidv4(),
+        "isVerified": true,
+        "userName": await getUserFromAccountName(req.body.acountName).then((userName) => userName).catch(() => ""),
+        "acountName": req.body.acountName,
+        "timeposted": req.body.timeposted,
+        "content": req.body.content,
+        "accountImgUrl": await getAccountImgUrlFromAccountName(req.body.acountName).then((ImgUrl) => ImgUrl).catch(() => ""),
+        "postImage": req.body.postImage,
+        "numberOfComments": 0,
+        "numberOfRetwits": 0,
+        "numberOfLikes": 0,
+        "retwitId": req.body.retwitId
+    }
+
+    let promiseArr = [
+        addTwit(newTwit).then(() => {
+            console.log("twits created");
+        }),
+        retwitPost(accountName, req.body.retwitId).then(() => {
+            console.log(`${req.body.retwitId} retwited`);
+        })
+    ]
+
+    Promise.all(promiseArr).then(() => {
+        res.status(201)
         res.send();
-        console.log(`${twitId} retwited`);
     })
 
-    // isPostShared(accountName, twitId).then((isShared) => {
-    //     if (isShared) {
-    //         unsharePost(accountName, twitId).then(() => {
-    //             res.send();
-    //             console.log(`${twitId} unshared`);
-    //         })
-    //     }
-    //     else {
-    //     }
 
-
-    // }).catch(() => {
-    // })
 
 })
 

@@ -127,6 +127,7 @@ router.post('/createTwit', (req, res) => __awaiter(void 0, void 0, void 0, funct
         "numberOfComments": 0,
         "numberOfRetwits": 0,
         "numberOfLikes": 0,
+        "retwitId": req.body.retwitId
     };
     // TODO: add catch after then
     (0, twit_1.addTwit)(newTwit).then(() => {
@@ -168,23 +169,33 @@ router.post('/liketwit', (req, res) => {
     }).catch(() => {
     });
 });
-router.post('/retwittwit', (req, res) => {
+router.post('/retwittwit', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let accountName = req.body.accountName;
-    let twitId = req.body.twitId;
-    (0, twit_1.retwitPost)(accountName, twitId).then(() => {
+    let newTwit = {
+        "id": (0, uuid_1.v4)(),
+        "isVerified": true,
+        "userName": yield (0, users_1.getUserFromAccountName)(req.body.acountName).then((userName) => userName).catch(() => ""),
+        "acountName": req.body.acountName,
+        "timeposted": req.body.timeposted,
+        "content": req.body.content,
+        "accountImgUrl": yield (0, users_1.getAccountImgUrlFromAccountName)(req.body.acountName).then((ImgUrl) => ImgUrl).catch(() => ""),
+        "postImage": req.body.postImage,
+        "numberOfComments": 0,
+        "numberOfRetwits": 0,
+        "numberOfLikes": 0,
+        "retwitId": req.body.retwitId
+    };
+    let promiseArr = [
+        (0, twit_1.addTwit)(newTwit).then(() => {
+            console.log("twits created");
+        }),
+        (0, twit_1.retwitPost)(accountName, req.body.retwitId).then(() => {
+            console.log(`${req.body.retwitId} retwited`);
+        })
+    ];
+    Promise.all(promiseArr).then(() => {
+        res.status(201);
         res.send();
-        console.log(`${twitId} retwited`);
     });
-    // isPostShared(accountName, twitId).then((isShared) => {
-    //     if (isShared) {
-    //         unsharePost(accountName, twitId).then(() => {
-    //             res.send();
-    //             console.log(`${twitId} unshared`);
-    //         })
-    //     }
-    //     else {
-    //     }
-    // }).catch(() => {
-    // })
-});
+}));
 module.exports = router;

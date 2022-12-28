@@ -28,14 +28,15 @@ function addTwit(data) {
     //TODO: add check that account exist
     const promise = new Promise((resolve, reject) => {
         // Add a twit to the table..
-        db.run("INSERT INTO twits (id, isVerified, userName, acountName, timeposted, content, accountImgUrl, postImage) VALUES (?,?,?,?,?,?,?,?)", [data.id,
+        db.run("INSERT INTO twits (id, isVerified, userName, acountName, timeposted, content, accountImgUrl, postImage, retwitId) VALUES (?,?,?,?,?,?,?,?,?)", [data.id,
             data.isVerified,
             data.userName,
             data.acountName,
             timePosted,
             data.content,
             data.accountImgUrl,
-            data.postImage], function (error) {
+            data.postImage,
+            data.retwitId], function (error) {
             if (error) {
                 reject(new Error("error"));
             }
@@ -63,7 +64,8 @@ function getTwit(twitId) {
                     postImage: row.postImage,
                     numberOfComments: 0,
                     numberOfRetwits: yield getRetwitCount(row.id).then((shares) => shares).catch(() => 0),
-                    numberOfLikes: yield (0, likes_1.getLikeCount)(row.id).then((likes) => likes).catch(() => 0)
+                    numberOfLikes: yield (0, likes_1.getLikeCount)(row.id).then((likes) => likes).catch(() => 0),
+                    retwitId: row.retwitId
                 };
                 resolve(twit);
             }));
@@ -95,7 +97,8 @@ function getTwits(twitsCount, twitsNotToGet) {
                     postImage: row.postImage,
                     numberOfComments: 0,
                     numberOfRetwits: yield getRetwitCount(row.id).then((shares) => shares).catch(() => 0),
-                    numberOfLikes: yield (0, likes_1.getLikeCount)(row.id).then((likes) => likes).catch(() => 0)
+                    numberOfLikes: yield (0, likes_1.getLikeCount)(row.id).then((likes) => likes).catch(() => 0),
+                    retwitId: row.retwitId
                 };
                 resolve(twit);
             }));
