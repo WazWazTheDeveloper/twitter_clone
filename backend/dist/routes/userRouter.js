@@ -25,13 +25,13 @@ router.post('/createUser', (req, res) => {
         }
         else {
             res.status(406);
-            res.send("");
+            res.send();
             console.log("failed to create a user");
         }
     }).catch(error => {
         console.log(error.message);
         res.status(406);
-        res.send("");
+        res.send();
     });
 });
 router.post('/login', (req, res) => {

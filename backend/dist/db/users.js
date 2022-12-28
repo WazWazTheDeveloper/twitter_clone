@@ -33,7 +33,7 @@ function createUserInDB(user) {
         }
         db.run(`INSERT INTO users (email,password,userName,accountName,accountImgUrl) VALUES (?,?,?,?,?)`, [email, password, userName, accountName, accountImgUrl], function (error) {
             if (error) {
-                reject(new Error("error"));
+                reject(error);
             }
             else {
                 resolve(true);

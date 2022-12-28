@@ -24,13 +24,13 @@ router.post('/createUser', (req: Request, res: Response) => {
             }
             else {
                 res.status(406)
-                res.send("");
+                res.send();
                 console.log("failed to create a user");
             }
         }).catch(error => {
             console.log(error.message)
             res.status(406)
-            res.send("");
+            res.send();
         });
 })
 

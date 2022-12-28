@@ -35,7 +35,7 @@ function createUserInDB(user: User): Promise<boolean> {
         db.run(`INSERT INTO users (email,password,userName,accountName,accountImgUrl) VALUES (?,?,?,?,?)`, [email, password, userName, accountName, accountImgUrl],
             function (error: Error) {
                 if (error) {
-                    reject(new Error("error"))
+                    reject(error)
                 }
                 else {
                     resolve(true)

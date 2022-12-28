@@ -42,7 +42,7 @@ function SignupMenu(props: any) {
         // TODO: finish this
             .then((response) => {
                 if(response.ok) {
-                    response.json().then((data) => props.loginFunction(data))
+                    response.text().then((data) => props.loginFunction(data))
                 }
                 else {
                     console.log("failed to sign up");
